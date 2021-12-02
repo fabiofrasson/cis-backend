@@ -28,14 +28,33 @@ public class Patient implements Serializable {
   @Column(name = "id", updatable = false, nullable = false)
   private UUID id;
 
+  @Column(nullable = false)
   private String name;
+
+  @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
   private String rg;
+
+  @Column(nullable = false)
   private String cpf;
+
+  @Column(nullable = false)
   private Date dateOfBirth;
+
+  @Column(nullable = false)
   private String phone;
+
+  @Column(nullable = false)
   private String password;
+
+  @Column(nullable = false)
   private String motherName;
+
+  @Column(nullable = false)
   private Character gender;
+
+  //  @Column(nullable = false)
   //  private Address address;
 }

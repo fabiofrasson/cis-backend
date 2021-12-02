@@ -6,10 +6,11 @@ import com.cis.model.dto.PatientCreationDTO;
 import com.cis.model.dto.PatientReturnDTO;
 import com.cis.model.dto.PatientUpdateDTO;
 import com.cis.repository.PatientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,14 +23,25 @@ public class PatientService {
     this.repository = repository;
   }
 
-  public List<Patient> listAll() {
-    return repository.findAll();
+  public Page<Patient> listAll(Pageable pageable) {
+    return repository.findAll(pageable);
   }
 
   public Patient findByIdOrThrowError(UUID id) {
     return repository
         .findById(id)
         .orElseThrow(() -> new BadRequestException("Paciente não encontrado."));
+  }
+
+  public Optional<Patient> findByEmailOrThrowError(String email) {
+
+    Optional<Patient> foundPatient = repository.findByEmail(email);
+
+    if (foundPatient.isPresent()) {
+      return foundPatient;
+    } else {
+      throw new BadRequestException("Paciente não encontrado.");
+    }
   }
 
   @Transactional
@@ -64,6 +76,11 @@ public class PatientService {
   public String update(UUID id, PatientUpdateDTO patient) {
     Patient savedPatient = this.findByIdOrThrowError(id);
 
+    //    savedPatient.setName(patient.getName());
+    //    savedPatient.setEmail(patient.getEmail());
+    //    savedPatient.setPhone(patient.getPhone());
+    //    savedPatient.setGender(patient.getGender());
+
     Patient updatedPatient =
         Patient.builder()
             .id(savedPatient.getId())
@@ -75,6 +92,7 @@ public class PatientService {
             .build();
 
     repository.save(updatedPatient);
+    //    repository.save(savedPatient);
     return "Registro atualizado com sucesso!";
   }
 }
