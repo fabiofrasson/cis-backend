@@ -6,8 +6,6 @@ import com.cis.model.dto.PatientReturnDTO;
 import com.cis.model.dto.PatientUpdateDTO;
 import com.cis.service.PatientService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -50,12 +48,12 @@ public class PatientController {
 
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
-    return new ResponseEntity<String>(service.delete(id), HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(service.delete(id), HttpStatus.NO_CONTENT);
   }
 
   @PutMapping(path = "/{id}")
   public ResponseEntity<String> update(
       @RequestParam("id") UUID id, @RequestBody PatientUpdateDTO patient) {
-    return new ResponseEntity<String>(service.update(id, patient), HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(service.update(id, patient), HttpStatus.NO_CONTENT);
   }
 }
