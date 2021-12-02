@@ -50,7 +50,7 @@ public class PatientService {
                   .gender(patientCreationDTO.getGender())
                   .password(patientCreationDTO.getPassword())
                   .motherName(patientCreationDTO.getMotherName())
-                  .address(patientCreationDTO.getAddress())
+                  //                  .address(patientCreationDTO.getAddress())
                   .build());
       return new PatientReturnDTO(patientToBeSaved);
     }
@@ -71,7 +71,7 @@ public class PatientService {
             .email(patient.getEmail())
             .phone(patient.getPhone())
             .gender(patient.getGender())
-            .address(patient.getAddress())
+            //            .address(patient.getAddress())
             .build();
 
     repository.save(updatedPatient);

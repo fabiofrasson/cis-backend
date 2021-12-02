@@ -37,5 +37,5 @@ public class Patient implements Serializable {
   private String password;
   private String motherName;
   private Character gender;
-  private Address address;
+  //  private Address address;
 }

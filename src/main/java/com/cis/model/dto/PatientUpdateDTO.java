@@ -21,14 +21,14 @@ public class PatientUpdateDTO implements Serializable {
   private String email;
   private String phone;
   private Character gender;
-  private Address address;
+  //  private Address address;
 
   public PatientUpdateDTO(Patient patient) {
-    this.id = patient.getId()
+    this.id = patient.getId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.phone = patient.getPhone();
     this.gender = patient.getGender();
-    this.address = patient.getAddress();
+    //    this.address = patient.getAddress();
   }
 }

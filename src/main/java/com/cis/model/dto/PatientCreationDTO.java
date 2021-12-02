@@ -25,7 +25,7 @@ public class PatientCreationDTO implements Serializable {
   private String motherName;
   private String password;
   private Character gender;
-  private Address address;
+  //  private Address address;
 
   public PatientCreationDTO(Patient patient) {
     this.name = patient.getName();
@@ -37,6 +37,6 @@ public class PatientCreationDTO implements Serializable {
     this.motherName = patient.getMotherName();
     this.gender = patient.getGender();
     this.password = patient.getPassword();
-    this.address = patient.getAddress();
+    //    this.address = patient.getAddress();
   }
 }
