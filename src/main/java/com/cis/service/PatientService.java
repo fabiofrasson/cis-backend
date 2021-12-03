@@ -7,10 +7,13 @@ import com.cis.model.dto.PatientReturnDTO;
 import com.cis.model.dto.PatientUpdateDTO;
 import com.cis.repository.PatientRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,22 +26,35 @@ public class PatientService {
     this.repository = repository;
   }
 
-  public Page<Patient> listAll(Pageable pageable) {
-    return repository.findAll(pageable);
+  public Page<PatientReturnDTO> listAll(Pageable pageable) {
+    Page<Patient> patients = repository.findAll(pageable);
+
+    List<PatientReturnDTO> patientsList = new ArrayList<>();
+
+    for (Patient patient : patients) {
+      patientsList.add(new PatientReturnDTO(patient));
+    }
+
+    return new PageImpl<>(patientsList);
   }
 
-  public Patient findByIdOrThrowError(UUID id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new BadRequestException("Paciente não encontrado."));
+  public PatientReturnDTO findByIdOrThrowError(UUID id) {
+    Optional<Patient> patient = repository.findById(id);
+
+    if (patient.isEmpty()) {
+      throw new BadRequestException("Paciente não encontrado.");
+    } else {
+      Patient patient1 = patient.get();
+      return new PatientReturnDTO(patient1);
+    }
   }
 
-  public Optional<Patient> findByEmailOrThrowError(String email) {
+  public PatientReturnDTO findByEmailOrThrowError(String email) {
 
-    Optional<Patient> foundPatient = repository.findByEmail(email);
+    Patient foundPatient = repository.findByEmailIgnoreCase(email);
 
-    if (foundPatient.isPresent()) {
-      return foundPatient;
+    if (foundPatient != null) {
+      return new PatientReturnDTO(foundPatient);
     } else {
       throw new BadRequestException("Paciente não encontrado.");
     }
@@ -46,8 +62,8 @@ public class PatientService {
 
   @Transactional
   public PatientReturnDTO save(PatientCreationDTO patientCreationDTO) {
-    Optional<Patient> findPatient = repository.findByEmail(patientCreationDTO.getEmail());
-    if (findPatient.isPresent()) {
+    Patient findPatient = repository.findByEmailIgnoreCase(patientCreationDTO.getEmail());
+    if (findPatient != null) {
       throw new BadRequestException("Paciente já cadastrado em nosso sistema.");
     } else {
       Patient patientToBeSaved =
@@ -69,30 +85,20 @@ public class PatientService {
   }
 
   public String delete(UUID id) {
-    repository.delete(findByIdOrThrowError(id));
+    repository.deleteById(id);
     return "Registro deletado com sucesso!";
   }
 
   public String update(UUID id, PatientUpdateDTO patient) {
-    Patient savedPatient = this.findByIdOrThrowError(id);
 
-    //    savedPatient.setName(patient.getName());
-    //    savedPatient.setEmail(patient.getEmail());
-    //    savedPatient.setPhone(patient.getPhone());
-    //    savedPatient.setGender(patient.getGender());
+    Patient savedPatient = repository.getById(id);
 
-    Patient updatedPatient =
-        Patient.builder()
-            .id(savedPatient.getId())
-            .name(patient.getName())
-            .email(patient.getEmail())
-            .phone(patient.getPhone())
-            .gender(patient.getGender())
-            //            .address(patient.getAddress())
-            .build();
+    savedPatient.setName(patient.getName());
+    savedPatient.setEmail(patient.getEmail());
+    savedPatient.setPhone(patient.getPhone());
+    savedPatient.setGender(patient.getGender());
 
-    repository.save(updatedPatient);
-    //    repository.save(savedPatient);
+    repository.save(savedPatient);
     return "Registro atualizado com sucesso!";
   }
 }
