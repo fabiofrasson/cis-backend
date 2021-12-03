@@ -15,12 +15,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/health-professionals")
@@ -70,13 +68,41 @@ public class HealthProfessionalController {
 
             final String jwt = jwtTokenUtil.generateToken(user);
 
-            return ResponseEntity.ok(new AuthenticationResponse(jwt));
+            return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.CREATED);
 
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
         }
     }
 
+    @GetMapping(path="/{id}")
+    public ResponseEntity<HealthProfessionalResponseDTO> show (@PathVariable UUID id){
+        try{
+            HealthProfessionalResponseDTO healthProfessionalResponseDTO = healthProfessionalService.findById(id);
+            return new ResponseEntity<>(healthProfessionalResponseDTO, HttpStatus.OK);
+        }catch (Exception e){
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 
+    @PutMapping(path="/{id}")
+    public ResponseEntity<HealthProfessionalResponseDTO> update(@PathVariable UUID id, @RequestBody HealthProfessionalCreationDTO entity){
+        try{
+            HealthProfessionalResponseDTO healthProfessionalResponseDTO = healthProfessionalService.update(id, entity);
+            return new ResponseEntity<>(healthProfessionalResponseDTO, HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @DeleteMapping(path="/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id){
+        try{
+            healthProfessionalService.delete(id);
+            return new ResponseEntity<>("Delete with success", HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 
 }
