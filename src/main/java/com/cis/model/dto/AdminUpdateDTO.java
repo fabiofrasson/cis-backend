@@ -18,11 +18,13 @@ public class AdminUpdateDTO implements Serializable {
 
     private UUID id;
     private String name;
+    private String phone;
     private String email;
 
     public AdminUpdateDTO(Admin admin) {
         this.id = admin.getId();
         this.name = admin.getName();
+        this.phone = admin.getPhone();
         this.email = admin.getEmail();
     }
 }

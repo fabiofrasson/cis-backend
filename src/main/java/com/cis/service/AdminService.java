@@ -68,17 +68,15 @@ public class AdminService {
 
     // UPDATE
     public String update(UUID id, AdminUpdateDTO admin) {
-        Admin savedAdmin = this.findByIdOrThrowError(id);
 
-        Admin updatedAdmin =
-                Admin.builder()
-                        .id(savedAdmin.getId())
-                        .name(savedAdmin.getName())
-                        .email(savedAdmin.getEmail())
-                        .build();
-        repository.save(updatedAdmin);
+        Admin savedAdmin = repository.getById(id);
 
-        return "Informações alteradas com sucesso!";
+        savedAdmin.setName(admin.getName());
+        savedAdmin.setEmail(admin.getEmail());
+        savedAdmin.setPhone(admin.getPhone());
+
+        repository.save(savedAdmin);
+        return "Cadastro atualizado com sucesso!";
     }
 
     //DELETE

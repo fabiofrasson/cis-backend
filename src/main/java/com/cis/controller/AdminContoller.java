@@ -33,8 +33,9 @@ public class AdminContoller {
         return new ResponseEntity<>(service.save(admin), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestParam("id")UUID id, @RequestBody AdminUpdateDTO admin) {
+    @PutMapping( "/{id}")
+    public ResponseEntity<String> update(
+            @PathVariable UUID id, @RequestBody AdminUpdateDTO admin) {
         return new ResponseEntity<>(service.update(id, admin), HttpStatus.OK);
     }
 
