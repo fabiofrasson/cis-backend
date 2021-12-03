@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class AddressService {
@@ -22,7 +23,7 @@ public class AddressService {
     return repository.findAll();
   }
 
-  public Address findByIdOrThrowResourceNotFoundException(Long id) {
+  public Address findByIdOrThrowResourceNotFoundException(UUID id) {
     return repository
         .findById(id)
         .orElseThrow(
@@ -97,11 +98,11 @@ public class AddressService {
   //    }
   //  }
 
-  public void delete(Long id) {
+  public void delete(UUID id) {
     repository.delete(findByIdOrThrowResourceNotFoundException(id));
   }
 
-  public void replace(Address address) throws Exception {
+  public void update(Address address) throws Exception {
     Address findAddress = repository.findByCep(address.getCep());
     if (findAddress == null) {
       throw new ResourceNotFoundException("Cep não encontrado, por favor tente novamente.");
