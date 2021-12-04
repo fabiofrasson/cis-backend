@@ -31,13 +31,13 @@ public class AddressController {
     return ResponseEntity.ok(service.findByIdOrThrowResourceNotFoundException(id));
   }
 
-  @GetMapping(path = "/search/{cep}/")
+  @GetMapping(path = "/search/")
   public ResponseEntity<Address> findByCep(@RequestParam String cep) {
     return ResponseEntity.ok(service.findByCep(cep));
   }
 
   @GetMapping(path = "/search/street/")
-  public ResponseEntity<Address> findByStreet(@RequestParam String street) {
+  public ResponseEntity<List<Address>> findByStreet(@RequestParam String street) {
     return ResponseEntity.ok(service.findByStreet(street));
   }
 
