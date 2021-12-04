@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,16 +37,16 @@ public class Appointment implements Serializable {
     @Column(nullable = false)
     private Integer minute;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 
-    @ManyToOne
-    @JoinColumn(name = "professional_id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private HealthProfessional professional;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Patient patient;
 
     @Column(nullable = false)

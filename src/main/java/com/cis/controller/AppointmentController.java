@@ -35,9 +35,9 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentResponseDTO> create(@RequestBody AppointmentRequestDTO entity){
+    public ResponseEntity<String> create(@RequestBody AppointmentRequestDTO entity){
         try {
-            AppointmentResponseDTO appointmentResponseDTO = service.create(entity);
+            var appointmentResponseDTO = service.create(entity);
             return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());

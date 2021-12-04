@@ -38,7 +38,7 @@ public class AppointmentService {
     public Optional<Appointment> findByUUID(UUID uuid) {return appointmentRepository.findById(uuid);}
 
     @Transactional
-    public AppointmentResponseDTO create(AppointmentRequestDTO entity) {
+    public String create(AppointmentRequestDTO entity) {
 
         // Variáveis de Verificação
         Optional<Appointment> busyHour = appointmentRepository.findByHour(entity.getHour());
@@ -47,7 +47,7 @@ public class AppointmentService {
         Optional<Appointment> busyRoom = appointmentRepository.findByRoomId(entity.getRoom_id());
         Optional<Appointment> busyPatient = appointmentRepository.findByPatientId(entity.getPatient_id());
 
-        // Verificação se o Professinal já está com algum agendamento para esse horário
+        // Verificação se o Professinal já está com algum agendamento para esse horário FALTA COLOCAR O DIA
         if (busyHour.isPresent() && busyMinute.isPresent() && busyProfessional.isPresent()) {
             throw new BadRequestException("Professional already busy for this time");
         }
@@ -70,7 +70,7 @@ public class AppointmentService {
         appointmentToBeSaved.setDate(entity.getDate());
 
         // Verificação se a hora é válida
-        if(entity.getHour() >= 0 && entity.getHour() <= 24) {
+        if(entity.getHour() >= 0 && entity.getHour() < 24) {
             appointmentToBeSaved.setHour(entity.getHour());
         } else {
             throw new BadRequestException("Hour not valid");
@@ -88,10 +88,29 @@ public class AppointmentService {
         appointmentToBeSaved.setRoom(room);
         appointmentToBeSaved.setPatient(patient);
         appointmentToBeSaved.setProfessional(professional);
+        appointmentToBeSaved.setId(UUID.randomUUID());
 
         Appointment save = appointmentRepository.save(appointmentToBeSaved);
 
-        return new AppointmentResponseDTO(save);
+        return "Appointment Created with Success";
+    }
+
+    public String update(UUID id, AppointmentRequestDTO entity){
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new BadRequestException("Appointment Not Found"));
+
+        Room room = roomRepository.findById(entity.getRoom_id()).orElseThrow(() -> new BadRequestException("Room not found"));
+        Patient patient = patientRepository.findById(entity.getPatient_id()).orElseThrow(() -> new BadRequestException("Patient not found"));
+        HealthProfessional professional = professionalRepository.findById(entity.getProfessional_id()).orElseThrow(() -> new BadRequestException("Professional not found"));
+
+        appointment.setHour(entity.getHour());
+        appointment.setMinute(entity.getMinute());
+        appointment.setRoom(room);
+        appointment.setPatient(patient);
+        appointment.setProfessional(professional);
+
+        Appointment save = appointmentRepository.save(appointment);
+
+        return ("Appointment modified with success");
     }
 
     public void delete(UUID uuid) { appointmentRepository.deleteById(uuid); }
