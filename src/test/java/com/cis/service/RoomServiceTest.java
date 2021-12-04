@@ -2,11 +2,8 @@ package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
 import com.cis.model.Room;
-import com.cis.model.dto.HeathProfessionalDTO.HealthProfessionalResponseDTO;
 import com.cis.model.dto.RoomDTO.RoomResponseDTO;
-import com.cis.repository.HealthProfessionalRepository;
 import com.cis.repository.RoomRepository;
-import com.cis.utils.HealthProfessionalCreator;
 import com.cis.utils.RoomCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +60,7 @@ class RoomServiceTest {
 
         Room room = roomService.create(RoomCreator.createRoomToBeSaved());
 
-        Assertions.assertThat(room).isNotNull();
+        Assertions.assertThat(room).isNull();
 
     }
 
@@ -82,6 +79,10 @@ class RoomServiceTest {
     @Test
     @DisplayName("Deve atualizar a sala e aparecer bem-sucedido")
     void test_update(){
+
+        BDDMockito.when(roomRepository.save(ArgumentMatchers.any()))
+                .thenReturn(RoomCreator.createRoomToBeSaved());
+
         RoomResponseDTO update = roomService.update(RoomCreator.createRoomToBeSaved());
 
         Assertions.assertThat(update).isNotNull();

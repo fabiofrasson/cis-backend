@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
 public class RoomControllerTest {
@@ -35,7 +34,8 @@ public class RoomControllerTest {
         BDDMockito.when(service.create(ArgumentMatchers.any()))
                 .thenReturn(RoomCreator.createRoomToBeSaved());
 
-        BDDMockito.when(service.update(ArgumentMatchers.any()));
+        BDDMockito.when(service.update(ArgumentMatchers.any()))
+                .thenReturn(RoomCreator.createValidRoomResponseDTOSaved());
 
         BDDMockito.doNothing().when(service).delete(ArgumentMatchers.any());
 
@@ -57,7 +57,7 @@ public class RoomControllerTest {
 
     @Test
     @DisplayName("Achar sala por ID")
-    void findById() {
+    void findByUUID() {
 
     }
 
