@@ -72,22 +72,26 @@ public class AddressService {
       }
       // repensar lógica daqui pra baixo
       else {
-        if (!Objects.equals(findAddress.getStreet(), "")) {
-          String street = findAddress.getStreet();
-          findAddress.setStreet(street);
+        if (Objects.equals(findAddress, addressToBeSaved)) {
+          return findAddress;
         } else {
-          findAddress.setStreet(addressToBeSaved.getStreet());
+          if (!Objects.equals(findAddress.getStreet(), "")) {
+            String street = findAddress.getStreet();
+            findAddress.setStreet(street);
+          } else {
+            findAddress.setStreet(addressToBeSaved.getStreet());
+          }
+          findAddress.setCity(addressToBeSaved.getCity());
+          findAddress.setUf(addressToBeSaved.getUf());
+          if (!Objects.equals(findAddress.getNeighborhood(), "")) {
+            String neighborhood = findAddress.getNeighborhood();
+            findAddress.setNeighborhood(neighborhood);
+          } else {
+            findAddress.setNeighborhood(addressToBeSaved.getNeighborhood());
+          }
+          // fim repensar lógica
+          return repository.save(findAddress);
         }
-        findAddress.setCity(addressToBeSaved.getCity());
-        findAddress.setUf(addressToBeSaved.getUf());
-        if (!Objects.equals(findAddress.getNeighborhood(), "")) {
-          String neighborhood = findAddress.getNeighborhood();
-          findAddress.setNeighborhood(neighborhood);
-        } else {
-          findAddress.setNeighborhood(addressToBeSaved.getNeighborhood());
-        }
-        // fim repensar lógica
-        return repository.save(findAddress);
       }
     }
     // Caso o endereço ainda não exista
@@ -112,8 +116,16 @@ public class AddressService {
     }
   }
 
+  public void saveAll(List<Address> addresses) {
+    repository.saveAll(addresses);
+  }
+
   public void delete(UUID id) {
     repository.delete(findByIdOrThrowResourceNotFoundException(id));
+  }
+
+  public void deleteAll() {
+    repository.deleteAll();
   }
 
   public void update(Address address) throws Exception {
