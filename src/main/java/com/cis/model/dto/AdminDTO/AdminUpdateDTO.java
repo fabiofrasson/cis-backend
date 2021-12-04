@@ -1,4 +1,4 @@
-package com.cis.model.dto;
+package com.cis.model.dto.AdminDTO;
 
 import com.cis.model.Admin;
 import lombok.AllArgsConstructor;
