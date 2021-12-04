@@ -2,9 +2,9 @@ package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
 import com.cis.model.Patient;
-import com.cis.model.dto.PatientCreationDTO;
-import com.cis.model.dto.PatientReturnDTO;
-import com.cis.model.dto.PatientUpdateDTO;
+import com.cis.model.dto.PatientDTO.PatientCreationDTO;
+import com.cis.model.dto.PatientDTO.PatientReturnDTO;
+import com.cis.model.dto.PatientDTO.PatientUpdateDTO;
 import com.cis.repository.PatientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

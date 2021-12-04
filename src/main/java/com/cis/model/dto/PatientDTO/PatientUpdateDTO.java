@@ -1,4 +1,4 @@
-package com.cis.model.dto;
+package com.cis.model.dto.PatientDTO;
 
 import com.cis.model.Patient;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package com.cis.controller;
 
-import com.cis.model.dto.PatientCreationDTO;
-import com.cis.model.dto.PatientReturnDTO;
-import com.cis.model.dto.PatientUpdateDTO;
+import com.cis.model.dto.PatientDTO.PatientCreationDTO;
+import com.cis.model.dto.PatientDTO.PatientReturnDTO;
+import com.cis.model.dto.PatientDTO.PatientUpdateDTO;
 import com.cis.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

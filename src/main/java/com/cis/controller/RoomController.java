@@ -17,7 +17,7 @@ import java.util.UUID;
 public class RoomController {
 
     @Autowired
-    private RoomService service;
+    private final RoomService service;
 
     @Autowired
     public RoomController(RoomService service) {
