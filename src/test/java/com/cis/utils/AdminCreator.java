@@ -58,6 +58,7 @@ public class AdminCreator {
                 .builder()
                 .id(UUID.randomUUID())
                 .name("Teste Admin")
+                .email("teste@creator.com")
                 .build();
     }
 }

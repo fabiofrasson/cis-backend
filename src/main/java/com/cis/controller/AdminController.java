@@ -2,14 +2,12 @@ package com.cis.controller;
 
 import com.cis.config.jwtConfig.JwtUtil;
 import com.cis.model.Admin;
-import com.cis.model.Patient;
 import com.cis.model.dto.AdminDTO.AdminCreationDTO;
 import com.cis.model.dto.AdminDTO.AdminReturnDTO;
 import com.cis.model.dto.AdminDTO.AdminUpdateDTO;
 import com.cis.model.dto.UserDTO.AuthenticationRequest;
 import com.cis.model.dto.UserDTO.AuthenticationResponse;
 import com.cis.service.AdminService;
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

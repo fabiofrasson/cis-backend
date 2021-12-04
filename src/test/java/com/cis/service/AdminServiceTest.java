@@ -1,9 +1,6 @@
 package com.cis.service;
 
-import com.cis.exceptions.BadRequestException;
-import com.cis.model.Admin;
 import com.cis.model.dto.AdminDTO.AdminReturnDTO;
-import com.cis.model.dto.AdminDTO.AdminUpdateDTO;
 import com.cis.repository.AdminRepository;
 import com.cis.utils.AdminCreator;
 import org.assertj.core.api.Assertions;
