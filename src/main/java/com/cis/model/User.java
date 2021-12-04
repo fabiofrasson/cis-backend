@@ -20,7 +20,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorColumn(name="REF_TYPE")
+@Inheritance ( strategy = InheritanceType . TABLE_PER_CLASS )
 public abstract class User implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,6 @@ public abstract class User implements Serializable, UserDetails {
 
     @Column(nullable = false)
     protected Boolean active;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

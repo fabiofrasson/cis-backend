@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,5 +31,7 @@ public class HealthProfessional extends User implements Serializable{
     @Column(nullable = false)
     private String professionalDocument;
 
+    @OneToMany(mappedBy = "professional")
+    private List<Schedule> schedule;
 
 }
