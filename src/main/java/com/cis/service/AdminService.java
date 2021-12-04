@@ -2,9 +2,11 @@ package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
 import com.cis.model.Admin;
+import com.cis.model.HealthProfessional;
 import com.cis.model.dto.AdminDTO.AdminCreationDTO;
 import com.cis.model.dto.AdminDTO.AdminReturnDTO;
 import com.cis.model.dto.AdminDTO.AdminUpdateDTO;
+import com.cis.model.dto.HeathProfessionalDTO.HealthProfessionalResponseDTO;
 import com.cis.repository.AdminRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,10 +35,9 @@ public class AdminService implements UserDetailsService {
     }
 
     // FIND BY ID
-    public Admin findByIdOrThrowError(UUID id) {
-        return repository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestException("Admin não encontrado."));
+    public AdminReturnDTO findByIdOrThrowError(UUID id) {
+        Admin admin = repository.findById(id).orElseThrow(() -> new BadRequestException("Admin Not Found"));
+        return new AdminReturnDTO(admin);
     }
 
     // FIND BY EMAIL
@@ -95,7 +96,8 @@ public class AdminService implements UserDetailsService {
 
     //DELETE
     public String delete(UUID id) {
-        repository.delete(findByIdOrThrowError(id));
+        Admin admin = repository.findById(id).orElseThrow(() -> new BadRequestException("User Not Found"));
+        repository.delete(admin);
         return "Admin deletado com sucesso!";
     }
 }

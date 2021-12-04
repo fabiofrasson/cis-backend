@@ -86,7 +86,7 @@ public class AdminController {
 
     // FIND BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<Admin> findById(@PathVariable("id") UUID id) {
+    public ResponseEntity<AdminReturnDTO> findById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(service.findByIdOrThrowError(id));
     }
 
