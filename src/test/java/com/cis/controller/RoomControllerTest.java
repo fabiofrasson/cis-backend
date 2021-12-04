@@ -34,7 +34,7 @@ public class RoomControllerTest {
         BDDMockito.when(service.create(ArgumentMatchers.any()))
                 .thenReturn(RoomCreator.createRoomToBeSaved());
 
-        BDDMockito.when(service.update(ArgumentMatchers.any()))
+        BDDMockito.when(service.update(ArgumentMatchers.any(),ArgumentMatchers.any()))
                 .thenReturn(RoomCreator.createValidRoomResponseDTOSaved());
 
         BDDMockito.doNothing().when(service).delete(ArgumentMatchers.any());
