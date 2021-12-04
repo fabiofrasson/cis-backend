@@ -4,6 +4,7 @@ import com.cis.model.Admin;
 import com.cis.model.dto.AdminDTO.AdminCreationDTO;
 import com.cis.model.dto.AdminDTO.AdminReturnDTO;
 import com.cis.model.dto.AdminDTO.AdminUpdateDTO;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ public class AdminCreator {
         admin.setPhone("(45) 999 155 581");
         admin.setActive(true);
         admin.setEmail("teste@admin.com");
-        admin.setPassword("senhaFortissima");
+        admin.setPassword(new BCryptPasswordEncoder().encode("senhaFortissima"));
         admin.setId(UUID.randomUUID());
 
         return admin;
