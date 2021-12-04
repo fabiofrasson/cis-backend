@@ -37,7 +37,7 @@ public class Address implements Serializable {
   @SerializedName(value = "logradouro")
   private String street;
 
-  @NotEmpty(message = "A cidade deve ser preenchido")
+  @NotEmpty(message = "A cidade deve ser preenchida")
   @SerializedName(value = "localidade")
   private String city;
 
