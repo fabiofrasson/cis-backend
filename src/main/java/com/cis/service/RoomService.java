@@ -44,8 +44,8 @@ public class RoomService {
         repository.deleteById(uuid);
     }
 
-    public RoomResponseDTO update(Room room) {
-        Optional<Room> salaParaMudar = repository.findByRoomNumber(room.getRoomNumber());
+    public RoomResponseDTO update(UUID id, Room room) {
+        Optional<Room> salaParaMudar = repository.findById(id);
 
         if (salaParaMudar.isEmpty()) {
             throw new BadRequestException("Sala não encontrada.");
@@ -53,6 +53,5 @@ public class RoomService {
             return new RoomResponseDTO(repository.save(room));
         }
     }
-
 
 }

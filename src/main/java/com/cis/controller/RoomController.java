@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/salas")
+@RequestMapping("/api/room")
 public class RoomController {
 
     @Autowired
@@ -42,9 +42,9 @@ public class RoomController {
     }
 
 
-    @PutMapping  //update
-    public ResponseEntity<Void> replace(@RequestBody @Valid Room room) throws Exception {
-        service.update(room);
+    @PutMapping(path = "/{id}")  //update
+    public ResponseEntity<Void> replace(@PathVariable UUID id, @RequestBody @Valid Room room) throws Exception {
+        service.update(id, room);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

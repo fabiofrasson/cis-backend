@@ -83,7 +83,7 @@ class RoomServiceTest {
         BDDMockito.when(roomRepository.save(ArgumentMatchers.any()))
                 .thenReturn(RoomCreator.createRoomToBeSaved());
 
-        RoomResponseDTO update = roomService.update(RoomCreator.createRoomToBeSaved());
+        RoomResponseDTO update = roomService.update(UUID.randomUUID(), RoomCreator.createRoomToBeSaved());
 
         Assertions.assertThat(update).isNotNull();
 
