@@ -44,8 +44,6 @@ public class AddressService {
     return repository.findByStreetContaining(streetPattern);
   }
 
-  // Adicionar user na userList do cep que já está salvo
-
   @Transactional
   public Address save(Address address) throws Exception {
 

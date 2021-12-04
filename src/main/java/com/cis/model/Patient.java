@@ -52,10 +52,14 @@ public class Patient implements Serializable {
   @Column(nullable = false)
   private Character gender;
 
-  @JoinColumn(name = "addressId")
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-  private Address address;
+  @Column(nullable = false)
+  private String addressNumber;
 
-  //  @Column(nullable = false)
-  //  private Address address;
+  @Column(nullable = false)
+  // Complemento do endereço
+  private String addressLine2;
+
+  @JoinColumn(name = "addressId")
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private Address address;
 }

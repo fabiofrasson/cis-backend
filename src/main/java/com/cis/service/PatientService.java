@@ -1,6 +1,7 @@
 package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
+import com.cis.model.Address;
 import com.cis.model.Patient;
 import com.cis.model.dto.PatientCreationDTO;
 import com.cis.model.dto.PatientReturnDTO;
@@ -21,9 +22,11 @@ import java.util.UUID;
 public class PatientService {
 
   private PatientRepository repository;
+  private AddressService addressService;
 
-  public PatientService(PatientRepository repository) {
+  public PatientService(PatientRepository repository, AddressService addressService) {
     this.repository = repository;
+    this.addressService = addressService;
   }
 
   public Page<PatientReturnDTO> listAll(Pageable pageable) {
@@ -61,8 +64,14 @@ public class PatientService {
   }
 
   @Transactional
-  public PatientReturnDTO save(PatientCreationDTO patientCreationDTO) {
+  public PatientReturnDTO save(PatientCreationDTO patientCreationDTO) throws Exception {
+
     Patient findPatient = repository.findByEmailIgnoreCase(patientCreationDTO.getEmail());
+
+    Address address =
+        addressService.save(
+            CepService.convertCepToAddress(CepService.formatCep(patientCreationDTO.getCep())));
+
     if (findPatient != null) {
       throw new BadRequestException("Paciente já cadastrado em nosso sistema.");
     } else {
@@ -78,7 +87,9 @@ public class PatientService {
                   .gender(patientCreationDTO.getGender())
                   .password(patientCreationDTO.getPassword())
                   .motherName(patientCreationDTO.getMotherName())
-                  //                  .address(patientCreationDTO.getAddress())
+                  .addressNumber(patientCreationDTO.getAddressNumber())
+                  .addressLine2(patientCreationDTO.getAddressLine2())
+                  .address(address)
                   .build());
       return new PatientReturnDTO(patientToBeSaved);
     }
@@ -89,14 +100,20 @@ public class PatientService {
     return "Registro deletado com sucesso!";
   }
 
-  public String update(UUID id, PatientUpdateDTO patient) {
+  public String update(UUID id, PatientUpdateDTO patient) throws Exception {
 
     Patient savedPatient = repository.getById(id);
+
+    Address address =
+        addressService.save(CepService.convertCepToAddress(CepService.formatCep(patient.getCep())));
 
     savedPatient.setName(patient.getName());
     savedPatient.setEmail(patient.getEmail());
     savedPatient.setPhone(patient.getPhone());
     savedPatient.setGender(patient.getGender());
+    savedPatient.setAddressNumber(patient.getAddressNumber());
+    savedPatient.setAddressLine2(patient.getAddressLine2());
+    savedPatient.setAddress(address);
 
     repository.save(savedPatient);
     return "Registro atualizado com sucesso!";

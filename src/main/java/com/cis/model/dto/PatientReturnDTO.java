@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -17,10 +16,12 @@ public class PatientReturnDTO {
 
   private String name;
   private String email;
+  private UUID addressId;
 
   public PatientReturnDTO(Patient patient) {
     this.id = patient.getId();
     this.name = patient.getName();
     this.email = patient.getEmail();
+    this.addressId = patient.getAddress().getId();
   }
 }
