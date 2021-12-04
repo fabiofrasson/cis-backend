@@ -37,14 +37,14 @@ public class AddressController {
   }
 
   @GetMapping(path = "/search/street/")
-  public ResponseEntity<List<Address>> findByStreet(@RequestParam String street) {
+  public ResponseEntity<Address> findByStreet(@RequestParam String street) {
     return ResponseEntity.ok(service.findByStreet(street));
   }
 
-  @GetMapping(path = "/search/street-containing/")
-  public ResponseEntity<Address> findByStreetContaining(@RequestParam String pattern) {
-    return ResponseEntity.ok(service.findByStreetContaining(pattern));
-  }
+  //  @GetMapping(path = "/search/street-containing/")
+  //  public ResponseEntity<Address> findByStreetContaining(@RequestParam String pattern) {
+  //    return ResponseEntity.ok(service.findByStreetContaining(pattern));
+  //  }
 
   @PostMapping
   public ResponseEntity<Address> save(@RequestBody @Valid Address address) throws Exception {
