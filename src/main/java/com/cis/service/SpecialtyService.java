@@ -68,9 +68,17 @@ public class SpecialtyService {
     return new SpecialtyReturnDTO(specialtyToBeSaved);
   }
 
+  public void saveAll(List<Specialty> addresses) {
+    repository.saveAll(addresses);
+  }
+
   public String delete(UUID id) {
     repository.deleteById(id);
     return "Registro deletado com sucesso!";
+  }
+
+  public void deleteAll() {
+    repository.deleteAll();
   }
 
   public String update(UUID id, SpecialtyUpdateDTO specialty) {

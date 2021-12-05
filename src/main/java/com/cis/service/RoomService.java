@@ -54,9 +54,17 @@ public class RoomService {
         Room.builder().roomNumber(room.getRoomNumber()).specialties(room.getSpecialties()).build());
   }
 
+  public void saveAll(List<Room> rooms) {
+    repository.saveAll(rooms);
+  }
+
   public String delete(UUID id) {
     repository.deleteById(id);
     return "Registro deletado com sucesso!";
+  }
+
+  public void deleteAll() {
+    repository.deleteAll();
   }
 
   public String update(UUID id, Room room) {
