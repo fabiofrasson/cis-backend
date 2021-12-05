@@ -1,7 +1,7 @@
 package com.cis.controller;
 
 import com.cis.exceptions.ResourceNotFoundException;
-import com.cis.model.Specialty;
+import com.cis.model.dto.SpecialtyDTO.SpecialtyCreationDTO;
 import com.cis.model.dto.SpecialtyDTO.SpecialtyReturnDTO;
 import com.cis.model.dto.SpecialtyDTO.SpecialtyUpdateDTO;
 import com.cis.service.SpecialtyService;
@@ -39,7 +39,8 @@ public class SpecialtyController {
   }
 
   @PostMapping
-  public ResponseEntity<SpecialtyReturnDTO> save(@RequestBody @Valid Specialty specialty) {
+  public ResponseEntity<SpecialtyReturnDTO> save(
+      @RequestBody @Valid SpecialtyCreationDTO specialty) {
     return new ResponseEntity<>(service.save(specialty), HttpStatus.CREATED);
   }
 

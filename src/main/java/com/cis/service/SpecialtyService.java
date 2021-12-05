@@ -2,6 +2,7 @@ package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
 import com.cis.model.Specialty;
+import com.cis.model.dto.SpecialtyDTO.SpecialtyCreationDTO;
 import com.cis.model.dto.SpecialtyDTO.SpecialtyReturnDTO;
 import com.cis.model.dto.SpecialtyDTO.SpecialtyUpdateDTO;
 import com.cis.repository.SpecialtyRepository;
@@ -55,7 +56,7 @@ public class SpecialtyService {
   }
 
   @Transactional
-  public SpecialtyReturnDTO save(Specialty specialty) {
+  public SpecialtyReturnDTO save(SpecialtyCreationDTO specialty) {
     Optional<Specialty> findSpecialty = repository.findByNameIgnoreCase(specialty.getName());
 
     if (findSpecialty.isPresent()) {

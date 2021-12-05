@@ -29,6 +29,7 @@ public class Room implements Serializable {
   private String roomNumber;
 
   @ManyToMany
+  //          (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
       name = "room_specialties",
       joinColumns = @JoinColumn(name = "room_id"),

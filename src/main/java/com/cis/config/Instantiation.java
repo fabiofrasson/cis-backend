@@ -52,9 +52,9 @@ public class Instantiation implements CommandLineRunner {
     // ## ROOM
     roomService.deleteAll();
 
-    Room room = Room.builder().roomNumber("1").specialties(new ArrayList<>(specialties)).build();
-    Room room1 = Room.builder().build();
-    Room room2 = Room.builder().build();
+    Room room = Room.builder().roomNumber("1").specialties(specialties).build();
+    Room room1 = Room.builder().roomNumber("2").specialties(specialties).build();
+    Room room2 = Room.builder().roomNumber("3").specialties(specialties).build();
     List<Room> rooms = new ArrayList<>(Arrays.asList(room, room1, room2));
 
     addressService.saveAll(addresses);
