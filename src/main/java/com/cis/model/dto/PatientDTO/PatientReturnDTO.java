@@ -1,4 +1,4 @@
-package com.cis.model.dto;
+package com.cis.model.dto.PatientDTO;
 
 import com.cis.model.Patient;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class PatientReturnDTO {
   private UUID addressId;
 
   public PatientReturnDTO(Patient patient) {
-    this.id = patient.getId();
+    this.id = patient.getPatientId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.addressId = patient.getAddress().getId();

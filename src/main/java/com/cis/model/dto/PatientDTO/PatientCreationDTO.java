@@ -1,4 +1,4 @@
-package com.cis.model.dto;
+package com.cis.model.dto.PatientDTO;
 
 import com.cis.model.Address;
 import com.cis.model.Patient;

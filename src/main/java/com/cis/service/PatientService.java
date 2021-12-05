@@ -3,13 +3,17 @@ package com.cis.service;
 import com.cis.exceptions.BadRequestException;
 import com.cis.model.Address;
 import com.cis.model.Patient;
-import com.cis.model.dto.PatientCreationDTO;
-import com.cis.model.dto.PatientReturnDTO;
-import com.cis.model.dto.PatientUpdateDTO;
+import com.cis.model.dto.PatientDTO.PatientCreationDTO;
+import com.cis.model.dto.PatientDTO.PatientReturnDTO;
+import com.cis.model.dto.PatientDTO.PatientUpdateDTO;
 import com.cis.repository.PatientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class PatientService {
+public class PatientService implements UserDetailsService {
 
   private PatientRepository repository;
   private AddressService addressService;
@@ -27,6 +31,18 @@ public class PatientService {
   public PatientService(PatientRepository repository, AddressService addressService) {
     this.repository = repository;
     this.addressService = addressService;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+    Patient patient = repository.findByEmailIgnoreCase(email);
+
+    if (patient == null) {
+      throw new UsernameNotFoundException("Email ou senha inválidos, por favor tente novamente.");
+    }
+
+    return patient;
   }
 
   public Page<PatientReturnDTO> listAll(Pageable pageable) {
@@ -75,22 +91,26 @@ public class PatientService {
     if (findPatient != null) {
       throw new BadRequestException("Paciente já cadastrado em nosso sistema.");
     } else {
-      Patient patientToBeSaved =
-          repository.save(
-              Patient.builder()
-                  .name(patientCreationDTO.getName())
-                  .email(patientCreationDTO.getEmail())
-                  .rg(patientCreationDTO.getRg())
-                  .cpf(patientCreationDTO.getCpf())
-                  .dateOfBirth(patientCreationDTO.getDateOfBirth())
-                  .phone(patientCreationDTO.getPhone())
-                  .gender(patientCreationDTO.getGender())
-                  .password(patientCreationDTO.getPassword())
-                  .motherName(patientCreationDTO.getMotherName())
-                  .addressNumber(patientCreationDTO.getAddressNumber())
-                  .addressLine2(patientCreationDTO.getAddressLine2())
-                  .address(address)
-                  .build());
+      Patient patientToBeSaved = new Patient();
+
+      patientToBeSaved.setEmail(patientCreationDTO.getEmail());
+      patientToBeSaved.setPassword(
+          new BCryptPasswordEncoder().encode(patientCreationDTO.getEmail()));
+      patientToBeSaved.setRole("ROLE_PATIENT");
+      patientToBeSaved.setActive(true);
+      patientToBeSaved.setName(patientCreationDTO.getName());
+      patientToBeSaved.setRg(patientCreationDTO.getRg());
+      patientToBeSaved.setCpf(patientCreationDTO.getCpf());
+      patientToBeSaved.setDateOfBirth(patientCreationDTO.getDateOfBirth());
+      patientToBeSaved.setPhone(patientCreationDTO.getPhone());
+      patientToBeSaved.setMotherName(patientCreationDTO.getMotherName());
+      patientToBeSaved.setGender(patientCreationDTO.getGender());
+      patientToBeSaved.setAddressNumber(patientCreationDTO.getAddressNumber());
+      patientToBeSaved.setAddressLine2(patientCreationDTO.getAddressLine2());
+      patientToBeSaved.setAddress(address);
+
+      repository.save(patientToBeSaved);
+
       return new PatientReturnDTO(patientToBeSaved);
     }
   }

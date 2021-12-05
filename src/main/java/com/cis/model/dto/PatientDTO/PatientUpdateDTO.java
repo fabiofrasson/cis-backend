@@ -1,6 +1,7 @@
-package com.cis.model.dto;
+package com.cis.model.dto.PatientDTO;
 
 import com.cis.model.Patient;
+import com.cis.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class PatientUpdateDTO implements Serializable {
   private String neighborhood;
 
   public PatientUpdateDTO(Patient patient) {
-    this.id = patient.getId();
+    this.id = patient.getPatientId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.phone = patient.getPhone();
