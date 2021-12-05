@@ -36,13 +36,9 @@ public class PatientService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-    Patient patient = repository.findByEmailIgnoreCase(email);
-
-    if (patient == null) {
-      throw new UsernameNotFoundException("Email ou senha inválidos, por favor tente novamente.");
-    }
-
-    return patient;
+    return this.repository
+        .findByEmailIgnoreCase(email)
+        .orElseThrow(() -> new UsernameNotFoundException("Email ou senha inválidos."));
   }
 
   public Page<PatientReturnDTO> listAll(Pageable pageable) {
@@ -70,10 +66,10 @@ public class PatientService implements UserDetailsService {
 
   public PatientReturnDTO findByEmailOrThrowError(String email) {
 
-    Patient foundPatient = repository.findByEmailIgnoreCase(email);
+    Optional<Patient> foundPatient = repository.findByEmailIgnoreCase(email);
 
-    if (foundPatient != null) {
-      return new PatientReturnDTO(foundPatient);
+    if (foundPatient.isPresent()) {
+      return new PatientReturnDTO(foundPatient.get());
     } else {
       throw new BadRequestException("Paciente não encontrado.");
     }
@@ -82,17 +78,18 @@ public class PatientService implements UserDetailsService {
   @Transactional
   public PatientReturnDTO save(PatientCreationDTO patientCreationDTO) throws Exception {
 
-    Patient findPatient = repository.findByEmailIgnoreCase(patientCreationDTO.getEmail());
+    Optional<Patient> findPatient = repository.findByEmailIgnoreCase(patientCreationDTO.getEmail());
 
     Address address =
         addressService.save(
             CepService.convertCepToAddress(CepService.formatCep(patientCreationDTO.getCep())));
 
-    if (findPatient != null) {
+    if (findPatient.isPresent()) {
       throw new BadRequestException("Paciente já cadastrado em nosso sistema.");
     } else {
       Patient patientToBeSaved = new Patient();
 
+      patientToBeSaved.setPatientId(UUID.randomUUID());
       patientToBeSaved.setEmail(patientCreationDTO.getEmail());
       patientToBeSaved.setPassword(
           new BCryptPasswordEncoder().encode(patientCreationDTO.getEmail()));

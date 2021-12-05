@@ -1,6 +1,5 @@
 package com.cis.model.dto.PatientDTO;
 
-import com.cis.model.Address;
 import com.cis.model.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +27,7 @@ public class PatientCreationDTO implements Serializable {
   private Character gender;
   private String addressNumber;
   private String addressLine2;
-  private Address address;
+  //  private Address address;
 
   // Address
   private String cep;
@@ -49,6 +48,6 @@ public class PatientCreationDTO implements Serializable {
     this.addressNumber = patient.getAddressNumber();
     this.addressLine2 = patient.getAddressLine2();
     this.password = patient.getPassword();
-    this.address = patient.getAddress();
+    //    this.address = patient.getAddress();
   }
 }

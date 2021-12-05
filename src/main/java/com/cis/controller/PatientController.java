@@ -1,18 +1,27 @@
 package com.cis.controller;
 
+import com.cis.config.jwtConfig.JwtUtil;
 import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.dto.PatientDTO.PatientCreationDTO;
 import com.cis.model.dto.PatientDTO.PatientReturnDTO;
 import com.cis.model.dto.PatientDTO.PatientUpdateDTO;
+import com.cis.model.dto.UserDTO.AuthenticationRequest;
+import com.cis.model.dto.UserDTO.AuthenticationResponse;
 import com.cis.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +30,8 @@ import java.util.UUID;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class PatientController {
 
+  private final AuthenticationManager authenticationManager;
+  private final JwtUtil jwtTokenUtil;
   private PatientService service;
 
   @GetMapping
@@ -44,6 +55,37 @@ public class PatientController {
   public ResponseEntity<PatientReturnDTO> save(@RequestBody @Valid PatientCreationDTO patient)
       throws Exception {
     return new ResponseEntity<>(service.save(patient), HttpStatus.CREATED);
+  }
+
+  @PostMapping(path = "/login")
+  public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+      @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    try {
+
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(
+              authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+
+      final UserDetails user = service.loadUserByUsername(authenticationRequest.getEmail());
+
+      Optional<? extends GrantedAuthority> optionalGrantedAuthority =
+          user.getAuthorities().stream().findFirst();
+
+      if (optionalGrantedAuthority.isEmpty()) {
+        throw new Exception("Incorrect username or password");
+      }
+
+      if (!optionalGrantedAuthority.get().getAuthority().equals("ROLE_PATIENT")) {
+        throw new Exception("Incorrect username or password");
+      }
+
+      final String jwt = jwtTokenUtil.generateToken(user);
+
+      return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.CREATED);
+
+    } catch (BadCredentialsException e) {
+      throw new Exception("Incorrect username or password", e);
+    }
   }
 
   @DeleteMapping(path = "/{id}")
