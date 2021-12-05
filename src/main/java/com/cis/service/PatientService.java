@@ -92,7 +92,7 @@ public class PatientService implements UserDetailsService {
       patientToBeSaved.setPatientId(UUID.randomUUID());
       patientToBeSaved.setEmail(patientCreationDTO.getEmail());
       patientToBeSaved.setPassword(
-          new BCryptPasswordEncoder().encode(patientCreationDTO.getEmail()));
+          new BCryptPasswordEncoder().encode(patientCreationDTO.getPassword()));
       patientToBeSaved.setRole("ROLE_PATIENT");
       patientToBeSaved.setActive(true);
       patientToBeSaved.setName(patientCreationDTO.getName());
