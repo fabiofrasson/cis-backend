@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -55,6 +52,14 @@ public class Patient implements Serializable {
   @Column(nullable = false)
   private Character gender;
 
-  //  @Column(nullable = false)
-  //  private Address address;
+  @Column(nullable = false)
+  private String addressNumber;
+
+  @Column(nullable = false)
+  // Complemento do endereço
+  private String addressLine2;
+
+  @JoinColumn(name = "addressId")
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private Address address;
 }
