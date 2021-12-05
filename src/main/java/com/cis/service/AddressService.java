@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,28 +37,28 @@ public class AddressService {
     return repository.findByCep(CepService.formatCep(cep));
   }
 
-  public List<Address> findByStreet(String street) {
+  public Address findByStreet(String street) {
     return repository.findByStreetIgnoreCase(street);
   }
 
-  public Address findByStreetContaining(String streetPattern) {
-    return repository.findByStreetContaining(streetPattern);
-  }
+  //  public Address findByStreetContaining(String streetPattern) {
+  //    return repository.findByStreetContaining(streetPattern);
+  //  }
 
   @Transactional
   public Address save(Address address) throws Exception {
 
-    Address findAddress = repository.findByCep(address.getCep());
+    String street = address.getStreet().toLowerCase(Locale.ROOT);
+    Address addressByStreet = repository.findByStreetIgnoreCase(street);
+
+    Address addressByCep = repository.findByCep(address.getCep());
 
     Address addressToBeSaved =
         CepService.convertCepToAddress(CepService.formatCep(address.getCep()));
 
-    // Caso o endereço já exista
-    if (findAddress != null) {
-      // validar se rua e bairro são iguais ao registro já existente no BD, para ceps como MCR
-      if (!Objects.equals(findAddress.getStreet(), address.getStreet())
-          && !Objects.equals(findAddress.getNeighborhood(), address.getNeighborhood())) {
-
+    if (Objects.equals(addressToBeSaved.getNeighborhood(), "")
+        && Objects.equals(addressToBeSaved.getStreet(), "")) {
+      if (addressByStreet == null) {
         return repository.save(
             Address.builder()
                 .id(UUID.randomUUID())
@@ -67,49 +68,24 @@ public class AddressService {
                 .uf(address.getUf())
                 .neighborhood(address.getNeighborhood())
                 .build());
-      }
-      // repensar lógica daqui pra baixo
-      else {
-        if (Objects.equals(findAddress, addressToBeSaved)) {
-          return findAddress;
-        } else {
-          if (!Objects.equals(findAddress.getStreet(), "")) {
-            String street = findAddress.getStreet();
-            findAddress.setStreet(street);
-          } else {
-            findAddress.setStreet(addressToBeSaved.getStreet());
-          }
-          findAddress.setCity(addressToBeSaved.getCity());
-          findAddress.setUf(addressToBeSaved.getUf());
-          if (!Objects.equals(findAddress.getNeighborhood(), "")) {
-            String neighborhood = findAddress.getNeighborhood();
-            findAddress.setNeighborhood(neighborhood);
-          } else {
-            findAddress.setNeighborhood(addressToBeSaved.getNeighborhood());
-          }
-          // fim repensar lógica
-          return repository.save(findAddress);
-        }
-      }
-    }
-    // Caso o endereço ainda não exista
-    else {
-      // Casos em que o cep é geral para a cidade, ex Marechal Cândido Rondon (85960-000)
-      Address builtAddress =
-          Address.builder()
-              .cep(address.getCep())
-              .street(address.getStreet())
-              .city(address.getCity())
-              .uf(address.getUf())
-              .neighborhood(address.getNeighborhood())
-              .build();
 
-      // Verificar se o usuário inseriu logradouro e bairro
-      if (!Objects.equals(builtAddress.getNeighborhood(), "")
-          && !Objects.equals(builtAddress.getStreet(), "")) {
-        return repository.save(builtAddress);
       } else {
-        throw new InconsistentDataException("Por favor preencha os campos de logradouro e bairro.");
+        return addressByStreet;
+      }
+    } else {
+      if (addressByCep != null) {
+        return addressByCep;
+      } else {
+        if (!(Objects.equals(address.getCep(), addressToBeSaved.getCep())
+            & Objects.equals(address.getStreet(), addressToBeSaved.getStreet())
+            & Objects.equals(address.getCity(), addressToBeSaved.getCity())
+            & Objects.equals(address.getUf(), addressToBeSaved.getUf())
+            & Objects.equals(address.getNeighborhood(), addressToBeSaved.getNeighborhood()))) {
+          throw new InconsistentDataException(
+              "Os dados de endereço não batem. Por favor, tente novamente.");
+        } else {
+          return repository.save(address);
+        }
       }
     }
   }
