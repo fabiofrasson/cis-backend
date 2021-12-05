@@ -1,6 +1,5 @@
 package com.cis.controller;
 
-import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.dto.PatientCreationDTO;
 import com.cis.model.dto.PatientReturnDTO;
 import com.cis.model.dto.PatientUpdateDTO;
@@ -54,11 +53,6 @@ public class PatientController {
   @PutMapping(path = "/{id}")
   public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody PatientUpdateDTO patient)
       throws Exception {
-    PatientReturnDTO dto = service.findByIdOrThrowError(id);
-    if (dto.getId() == null) {
-      throw new ResourceNotFoundException(
-          "Paciente não encontrado, por favor revise o ID enviado.");
-    }
     return new ResponseEntity<>(service.update(id, patient), HttpStatus.OK);
   }
 }

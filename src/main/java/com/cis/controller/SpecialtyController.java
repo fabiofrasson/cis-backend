@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/specialties")
-public class RepositoryController {
+public class SpecialtyController {
 
   private SpecialtyService service;
 
-  public RepositoryController(SpecialtyService service) {
+  public SpecialtyController(SpecialtyService service) {
     this.service = service;
   }
 
