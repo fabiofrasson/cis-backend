@@ -13,6 +13,7 @@ import java.util.UUID;
 public class PatientReturnDTO {
 
   private UUID id;
+  private UUID patientId;
 
   private String name;
   private String email;
@@ -20,6 +21,7 @@ public class PatientReturnDTO {
 
   public PatientReturnDTO(Patient patient) {
     this.id = patient.getPatientId();
+    this.patientId = patient.getPatientId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.addressId = patient.getAddress().getId();
