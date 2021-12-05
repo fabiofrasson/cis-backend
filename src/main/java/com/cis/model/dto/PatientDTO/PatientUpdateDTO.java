@@ -33,7 +33,7 @@ public class PatientUpdateDTO implements Serializable {
   private String neighborhood;
 
   public PatientUpdateDTO(Patient patient) {
-    this.id = patient.getPatientId();
+    this.id = patient.getId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.phone = patient.getPhone();

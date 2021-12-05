@@ -19,7 +19,7 @@ public class PatientReturnDTO {
   private UUID addressId;
 
   public PatientReturnDTO(Patient patient) {
-    this.id = patient.getPatientId();
+    this.id = patient.getId();
     this.name = patient.getName();
     this.email = patient.getEmail();
     this.addressId = patient.getAddress().getId();
