@@ -40,6 +40,13 @@ public class RoomCreator {
                 .build();
     }
 
+    public static Room createRoomSaved(){
+        return Room.builder()
+                .id(UUID.randomUUID())
+                .roomNumber("01")
+                .build();
+    }
+
     public static Optional<Room> createOptionalRoomToBeSaved() {
         Room room = Room.builder()
                 .id(UUID.randomUUID())

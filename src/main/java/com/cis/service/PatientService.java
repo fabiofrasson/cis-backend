@@ -24,7 +24,7 @@ public class PatientService {
   }
 
   public Page<Patient> listAll(Pageable pageable) {
-    return repository.findAll(pageable);
+    return repository.findAll( pageable);
   }
 
   public Patient findByIdOrThrowError(UUID id) {

@@ -31,4 +31,7 @@ public class HealthProfessional extends User implements Serializable{
     @Column(nullable = false)
     private String professionalDocument;
 
+    @OneToMany(mappedBy = "professional")
+    private List<Schedule> schedules;
+
 }

@@ -2,6 +2,7 @@ package com.cis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,5 +30,10 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
-
+    @Column(nullable = false)
+    private Date date;
+    @Column(nullable = false)
+    private Integer hour;
+    @Column(nullable = false)
+    private Integer minutes;
 }
