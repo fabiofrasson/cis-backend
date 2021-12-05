@@ -66,12 +66,17 @@ public class AddressCreator {
   }
 
   public static List<Address> createAddressList() throws Exception {
-    String[] ceps = {"85851010", "85851-210", "85851000", "85852-000", "85851110"};
+    String[] ceps = {"08090-284", "04849529", "04843-425", "08226021", "04180-112"};
 
     List<Address> addressesToBeSaved = new ArrayList<>();
 
+    int i = 1;
+
     for (String cep : ceps) {
-      addressesToBeSaved.add(CepService.convertCepToAddress(cep));
+      Address address = CepService.convertCepToAddress(cep);
+      address.setId(UUID.fromString("bd213758-05f8-43f8-8732-471b7310830" + i));
+      addressesToBeSaved.add(address);
+      i += 1;
     }
 
     return addressesToBeSaved;
