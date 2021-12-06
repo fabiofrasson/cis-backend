@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +50,13 @@ public class AppointmentService {
         .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
   }
 
+  public Appointment findByDate(Date date) {
+
+    return appointmentRepository
+        .findByDate(date)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
   public Appointment findByHour(Integer hour) {
 
     return appointmentRepository
@@ -78,6 +86,14 @@ public class AppointmentService {
     return appointmentRepository
         .findByPatientId(patientId)
         .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
+  public Appointment findByBooking(
+      Date date, Integer hour, Integer minute, UUID patient, UUID professional) {
+    return appointmentRepository
+        .findAppointmentByDateAndAndHourAndMinuteAndPatientAndProfessional(
+            date, hour, minute, patient, professional)
+        .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
   }
 
   @Transactional

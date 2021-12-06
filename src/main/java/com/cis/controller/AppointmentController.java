@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.UUID;
 
 @RestController
@@ -33,30 +34,40 @@ public class AppointmentController {
     return new ResponseEntity<>(service.findByUUID(uuid), HttpStatus.OK);
   }
 
-  @GetMapping(path = "/find/hour")
+  @GetMapping(path = "/find/hour/")
   public ResponseEntity<Appointment> findByHour(@RequestParam("hour") Integer hour) {
     return ResponseEntity.ok(service.findByHour(hour));
   }
 
-  @GetMapping(path = "/find/minute")
+  @GetMapping(path = "/find/minute/")
   public ResponseEntity<Appointment> findByMinute(@RequestParam("minute") Integer minute) {
     return ResponseEntity.ok(service.findByMinute(minute));
   }
 
-  @GetMapping(path = "/find/professional")
+  @GetMapping(path = "/find/professional/")
   public ResponseEntity<Appointment> findByProfessionalId(
       @RequestParam("professionalId") UUID professionalId) {
     return ResponseEntity.ok(service.findByProfessionalId(professionalId));
   }
 
-  @GetMapping(path = "/find/room")
+  @GetMapping(path = "/find/room/")
   public ResponseEntity<Appointment> findByRoomId(@RequestParam("roomId") UUID roomId) {
     return ResponseEntity.ok(service.findByRoomId(roomId));
   }
 
-  @GetMapping(path = "/find/patient")
+  @GetMapping(path = "/find/patient/")
   public ResponseEntity<Appointment> findByPatientId(@RequestParam("patientId") UUID patientId) {
     return ResponseEntity.ok(service.findByPatientId(patientId));
+  }
+
+  @GetMapping(path = "/find/booking/")
+  public ResponseEntity<Appointment> findByBooking(
+      @RequestParam("date") Date date,
+      @RequestParam("hour") Integer hour,
+      @RequestParam("minute") Integer minute,
+      @RequestParam("patient") UUID patient,
+      @RequestParam("professional") UUID professional) {
+    return ResponseEntity.ok(service.findByBooking(date, hour, minute, patient, professional));
   }
 
   @PostMapping
