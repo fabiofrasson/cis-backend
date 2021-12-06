@@ -23,7 +23,6 @@ public class HealthProfessionalResponseDTO {
     private String name;
     private String phone;
     private String professionalDocument;
-    private List<ScheduleResponseDTO> schedules;
 
 
     public HealthProfessionalResponseDTO(HealthProfessional entity){
@@ -33,6 +32,5 @@ public class HealthProfessionalResponseDTO {
         this.name = entity.getName();
         this.phone = entity.getPhone();
         this.professionalDocument = entity.getProfessionalDocument();
-        this.schedules = entity.getSchedules().stream().map(ScheduleResponseDTO::new).collect(Collectors.toList());
     }
 }
