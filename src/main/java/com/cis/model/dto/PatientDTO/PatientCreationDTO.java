@@ -25,7 +25,16 @@ public class PatientCreationDTO implements Serializable {
   private String motherName;
   private String password;
   private Character gender;
+  private String addressNumber;
+  private String addressLine2;
   //  private Address address;
+
+  // Address
+  private String cep;
+  private String street;
+  private String city;
+  private String uf;
+  private String neighborhood;
 
   public PatientCreationDTO(Patient patient) {
     this.name = patient.getName();
@@ -36,6 +45,8 @@ public class PatientCreationDTO implements Serializable {
     this.phone = patient.getPhone();
     this.motherName = patient.getMotherName();
     this.gender = patient.getGender();
+    this.addressNumber = patient.getAddressNumber();
+    this.addressLine2 = patient.getAddressLine2();
     this.password = patient.getPassword();
     //    this.address = patient.getAddress();
   }

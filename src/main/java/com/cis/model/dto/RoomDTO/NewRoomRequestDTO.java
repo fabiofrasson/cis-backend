@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class NewRoomRequestDTO {
-    private Integer roomNumber;
-   // private String specialties;
-    private String appointments;
-
+  private Integer roomNumber;
+  // private String specialties;
+  private String appointments;
 }

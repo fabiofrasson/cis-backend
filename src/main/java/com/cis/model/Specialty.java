@@ -1,6 +1,6 @@
 package com.cis.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room implements Serializable {
+public class Specialty implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -27,13 +27,12 @@ public class Room implements Serializable {
   private UUID id;
 
   @Column(nullable = false)
-  private String roomNumber;
+  private String name;
 
-  @ManyToMany
-  @JoinTable(
-      name = "room_specialties",
-      joinColumns = @JoinColumn(name = "room_id"),
-      inverseJoinColumns = @JoinColumn(name = "specialty_id"))
-  @JsonManagedReference
-  List<Specialty> specialties;
+  @ManyToMany(mappedBy = "specialties")
+  @JsonBackReference
+  private List<Room> rooms;
+
+  //  @ManyToMany(mappedBy = "professionals")
+  //  private HealthProfessional professional;
 }
