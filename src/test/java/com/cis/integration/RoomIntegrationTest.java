@@ -18,64 +18,67 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class RoomIntegrationTest {
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+  @Autowired private TestRestTemplate testRestTemplate;
 
-    @Autowired
-    private RoomRepository roomRepository;
+  @Autowired private RoomRepository roomRepository;
 
-    @BeforeEach
-    void setup(){
+  @BeforeEach
+  void setup() {}
 
-    }
+  @Test
+  @DisplayName("Teste de Integração Salas - CREATE")
+  public void test_create() {
+    ResponseEntity<RoomResponseDTO> create =
+        testRestTemplate.exchange(
+            "/api/room",
+            HttpMethod.POST,
+            new HttpEntity<>(RoomCreator.createRoomToBeSaved()),
+            RoomResponseDTO.class);
 
-    @Test
-    @DisplayName("Teste de Integração Salas - CREATE")
-    public void test_create(){
-        ResponseEntity<RoomResponseDTO> create = testRestTemplate.exchange("/api/room", HttpMethod.POST, new HttpEntity<>(RoomCreator.createRoomToBeSaved()), RoomResponseDTO.class);
+    Assertions.assertThat(create).isNotNull();
+    Assertions.assertThat(create.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+  }
 
-        Assertions.assertThat(create).isNotNull();
-        Assertions.assertThat(create.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
+  @Test
+  @DisplayName("Teste de Integração Salas - FIND BY ID")
+  public void test_findById() {
+    Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
 
+    ResponseEntity<RoomResponseDTO> findById =
+        testRestTemplate.exchange(
+            "/api/room/{id}", HttpMethod.GET, null, RoomResponseDTO.class, saved.getId());
+    Assertions.assertThat(findById).isNotNull();
+    Assertions.assertThat(findById.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
 
-    @Test
-    @DisplayName("Teste de Integração Salas - FIND BY ID")
-    public void test_findById(){
-        Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
+  @Test
+  @DisplayName("Teste de Integração Salas - UPDATE")
+  public void test_update() {
+    Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
 
-        ResponseEntity<RoomResponseDTO> findById = testRestTemplate.exchange("/api/room/{id}", HttpMethod.GET, null, RoomResponseDTO.class, saved.getId());
-        Assertions.assertThat(findById).isNotNull();
-        Assertions.assertThat(findById.getStatusCode()).isEqualTo(HttpStatus.OK);
+    saved.setRoomNumber("456789456");
 
-    }
+    ResponseEntity<Void> update =
+        testRestTemplate.exchange(
+            "/api/room/{id}", HttpMethod.PUT, new HttpEntity<>(saved), Void.class, saved.getId());
+    Assertions.assertThat(update).isNotNull();
+    Assertions.assertThat(update.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+  }
 
-    @Test
-    @DisplayName("Teste de Integração Salas - UPDATE")
-    public void test_update(){
-        Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
+  @Test
+  @DisplayName("Teste de Integração Salas - DELETE")
+  public void test_delete() {
+    Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
 
-        saved.setRoomNumber("456789456");
-
-        ResponseEntity<Void> update = testRestTemplate.exchange("/api/room/{id}", HttpMethod.PUT, new HttpEntity<>(saved), Void.class, saved.getId());
-        Assertions.assertThat(update).isNotNull();
-        Assertions.assertThat(update.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    }
-
-    @Test
-    @DisplayName("Teste de Integração Salas - DELETE")
-    public void test_delete(){
-        Room saved = roomRepository.save(RoomCreator.createRoomToBeSaved());
-
-        ResponseEntity<String> delete = testRestTemplate.exchange("/api/room/{id}", HttpMethod.DELETE, null, String.class, saved.getId());
-        Assertions.assertThat(delete).isNotNull();
-        Assertions.assertThat(delete.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    }
-
+    ResponseEntity<String> delete =
+        testRestTemplate.exchange(
+            "/api/room/{id}", HttpMethod.DELETE, null, String.class, saved.getId());
+    Assertions.assertThat(delete).isNotNull();
+    Assertions.assertThat(delete.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+  }
 }

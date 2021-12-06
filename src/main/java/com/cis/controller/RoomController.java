@@ -1,57 +1,54 @@
 package com.cis.controller;
 
 import com.cis.model.Room;
+import com.cis.model.dto.RoomDTO.RoomCreationDTO;
 import com.cis.service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/room")
+@RequestMapping("/api/rooms")
 public class RoomController {
 
-    @Autowired
-    private RoomService service;
+  private RoomService service;
 
-    @Autowired
-    public RoomController(RoomService service) {
-        this.service = service;
-    }
+  public RoomController(RoomService service) {
+    this.service = service;
+  }
 
-    @GetMapping  //list
-    public ResponseEntity<List<Room>> list() {
-        return ResponseEntity.ok(service.listAll());
-    }
+  @GetMapping
+  public ResponseEntity<List<Room>> listAll() {
+    return ResponseEntity.ok(service.listAll());
+  }
 
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<Room> findById(@PathVariable("id") UUID id) {
+    return ResponseEntity.ok(service.findByIdOrThrowError(id));
+  }
 
-    @GetMapping(path = "/{uuid}") // UUID= "unicos"
-    public ResponseEntity<Optional<Room>> findRoomByUUID(@PathVariable("uuid") UUID uuid) {
-        return new ResponseEntity<>(service.findByUUID(uuid), HttpStatus.OK);
-    }
+  @GetMapping(path = "/find")
+  public ResponseEntity<Room> findByName(@RequestParam("number") String number) {
+    return ResponseEntity.ok(service.findByNumberOrThrowError(number));
+  }
 
+  @PostMapping
+  public ResponseEntity<Room> save(@RequestBody @Valid RoomCreationDTO room) {
+    return new ResponseEntity<>(service.save(room), HttpStatus.CREATED);
+  }
 
-    @PostMapping  //create
-    public ResponseEntity<Room> save(@RequestBody @Valid Room address) throws Exception {
-        return new ResponseEntity<>(service.create(address), HttpStatus.CREATED);
-    }
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
+    return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
+  }
 
-
-    @PutMapping(path = "/{id}")  //update
-    public ResponseEntity<Void> replace(@PathVariable UUID id, @RequestBody @Valid Room room) throws Exception {
-        service.update(id, room);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping(path = "/{id}")  //delete
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
+  @PutMapping(path = "/{id}")
+  public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody Room room)
+      throws Exception {
+    return new ResponseEntity<>(service.update(id, room), HttpStatus.OK);
+  }
 }

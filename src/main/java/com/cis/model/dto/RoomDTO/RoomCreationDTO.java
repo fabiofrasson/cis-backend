@@ -1,22 +1,22 @@
 package com.cis.model.dto.RoomDTO;
 
 import com.cis.model.Room;
+import com.cis.model.dto.SpecialtyDTO.SpecialtyCreationDTO;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class RoomResponseDTO {
-  private UUID id;
-  private String roomNumber;
-  // private String specialties;
+public class RoomCreationDTO {
 
-  public RoomResponseDTO(Room room) {
-    this.id = room.getId();
+  private String roomNumber;
+  private List<SpecialtyCreationDTO> specialties;
+
+  public RoomCreationDTO(Room room) {
     this.roomNumber = room.getRoomNumber();
   }
 }

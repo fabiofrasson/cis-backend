@@ -1,7 +1,5 @@
 package com.cis.model.dto.ScheduleDTO;
 
-import com.cis.model.dto.HeathProfessionalDTO.HealthProfessionalResponseDTO;
-import com.cis.model.dto.RoomDTO.RoomResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
