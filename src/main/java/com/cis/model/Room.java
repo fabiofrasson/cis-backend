@@ -36,4 +36,7 @@ public class Room implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "specialty_id"))
   @JsonManagedReference
   List<Specialty> specialties;
+
+  @OneToMany(mappedBy = "room")
+  private List<Appointment> appointments;
 }

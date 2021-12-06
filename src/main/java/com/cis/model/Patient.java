@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -53,4 +53,7 @@ public class Patient extends User implements Serializable {
   @JoinColumn(name = "addressId")
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Address address;
+
+  @OneToMany(mappedBy = "patient")
+  private List<Appointment> appointments;
 }

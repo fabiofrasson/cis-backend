@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,38 +17,41 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Appointment implements Serializable {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(name = "id", updatable = false, nullable = false)
+  private UUID id;
 
-    @Column(nullable = false)
-    private Date date;
+  @Column(nullable = false)
+  private Date date;
 
-    @Column(nullable = false)
-    private Integer hour;
+  @Column(nullable = false)
+  private Integer hour;
 
-    @Column(nullable = false)
-    private Integer minute;
+  @Column(nullable = false)
+  private Integer minute;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Room room;
+  @ManyToOne
+  @JoinColumn(name = "roomId", nullable = false)
+  private Room room;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private HealthProfessional professional;
+  @ManyToOne
+  @JoinColumn(name = "professionalId", nullable = false)
+  private HealthProfessional professional;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Patient patient;
+  @ManyToOne
+  @JoinColumn(name = "patientId", nullable = false)
+  private Patient patient;
 
-    @Column(nullable = false)
-    private String observation;
+  @Column(nullable = false)
+  private String observation;
 
-    @Column(nullable = false)
-    private Boolean paid;
+  @Column(nullable = false)
+  private Boolean paid;
+
+  @Column(nullable = false)
+  private Double fee;
 }
