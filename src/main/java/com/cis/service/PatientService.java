@@ -104,9 +104,9 @@ public class PatientService implements UserDetailsService {
       patientToBeSaved.setAddressLine2(patientCreationDTO.getAddressLine2());
       patientToBeSaved.setAddress(address);
 
-      repository.save(patientToBeSaved);
+      Patient patient = repository.save(patientToBeSaved);
 
-      return new PatientReturnDTO(patientToBeSaved);
+      return new PatientReturnDTO(patient);
     }
   }
 
@@ -117,13 +117,14 @@ public class PatientService implements UserDetailsService {
 
   public String update(UUID id, PatientUpdateDTO patient) throws Exception {
 
-    Patient savedPatient = repository.getById(id);
+    Patient savedPatient =
+        repository
+            .findById(id)
+            .orElseThrow(() -> new BadRequestException("Paciente não encontrado."));
 
     Address address =
         addressService.save(CepService.convertCepToAddress(CepService.formatCep(patient.getCep())));
 
-    savedPatient.setId(id);
-    savedPatient.setPatientId(patient.getPatientId());
     savedPatient.setName(patient.getName());
     savedPatient.setEmail(patient.getEmail());
     savedPatient.setPhone(patient.getPhone());
