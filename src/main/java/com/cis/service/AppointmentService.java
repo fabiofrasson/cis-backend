@@ -49,6 +49,37 @@ public class AppointmentService {
         .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
   }
 
+  public Appointment findByHour(Integer hour) {
+
+    return appointmentRepository
+        .findByHour(hour)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
+  public Appointment findByMinute(Integer minute) {
+    return appointmentRepository
+        .findByMinute(minute)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
+  public Appointment findByProfessionalId(UUID professionalId) {
+    return appointmentRepository
+        .findByProfessionalId(professionalId)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
+  public Appointment findByRoomId(UUID roomId) {
+    return appointmentRepository
+        .findByRoomId(roomId)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
+  public Appointment findByPatientId(UUID patientId) {
+    return appointmentRepository
+        .findByPatientId(patientId)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
+  }
+
   @Transactional
   public String create(AppointmentRequestDTO entity) {
 
