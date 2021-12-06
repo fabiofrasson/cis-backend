@@ -1,9 +1,14 @@
 package com.cis.config.jwtConfig;
 
+import com.cis.exceptions.BadRequestException;
+import com.cis.model.User;
+import com.cis.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +22,9 @@ public class JwtUtil {
 
     @Value("${jwt.secret}") // application.properties
     private String SECRET_KEY;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Acessar o username do Payload
     public String extractUsername(String token) {
@@ -47,6 +55,12 @@ public class JwtUtil {
     // Gerar um novo Token
     public String generateToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
+
+        GrantedAuthority grantedAuthority = user.getAuthorities().stream().findFirst().get();
+
+        claims.put("role", grantedAuthority.getAuthority());
+        claims.put("email", user.getUsername());
+
         return createToken(claims, user.getUsername());
     }
 
@@ -55,8 +69,7 @@ public class JwtUtil {
 
         return Jwts //
                 .builder() //
-                .setClaims(claims) //
-                .setSubject(username) //
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis())) //
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 12)) // 12 horas
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY) //
