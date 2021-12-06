@@ -101,9 +101,11 @@ public class ScheduleService {
             HealthProfessional healthProfessional = healthProfessionalRepository.findById((scheduleRequestDTO.getProfessional())).orElseThrow(() -> new BadRequestException("Health Professional Not Found"));
             Room room = roomRepository.findById(scheduleRequestDTO.getRoom()).orElseThrow(() -> new BadRequestException("Room not Found"));
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = simpleDateFormat.format(scheduleRequestDTO.getDate());
+
             schedule.setProfessional(healthProfessional);
             schedule.setRoom(room);
-            schedule.setDate(simpleDateFormat.parse(scheduleRequestDTO.getDate().toString()));
+            schedule.setDate(simpleDateFormat.parse(format));
 
             Schedule save = scheduleRepository.save(schedule);
             return new ScheduleResponseDTO(save);

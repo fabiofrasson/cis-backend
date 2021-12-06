@@ -24,12 +24,14 @@ public class Schedule {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "professional_id")
+    @JoinColumn(name = "professional")
     private HealthProfessional professional;
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room")
     private Room room;
+
+
     @Column(nullable = false)
     private Date date;
     @Column(nullable = false)
