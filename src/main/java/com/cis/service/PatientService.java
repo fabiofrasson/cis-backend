@@ -115,6 +115,10 @@ public class PatientService implements UserDetailsService {
     return "Registro deletado com sucesso!";
   }
 
+  public void deleteAll() {
+    repository.deleteAll();
+  }
+
   public String update(UUID id, PatientUpdateDTO patient) throws Exception {
 
     Patient savedPatient =

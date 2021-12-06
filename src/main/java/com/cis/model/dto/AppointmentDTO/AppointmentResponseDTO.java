@@ -17,23 +17,27 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class AppointmentResponseDTO {
-    private UUID id;
-    private Date date;
-    private Integer hour;
-    private Integer minute;
-    private RoomResponseDTO room;
-    private HealthProfessionalResponseDTO professional;
-    private PatientReturnDTO patient;
-    private String observation;
-    private Boolean paid;
+  private UUID id;
+  private Date date;
+  private Integer hour;
+  private Integer minute;
+  private RoomResponseDTO room;
+  private HealthProfessionalResponseDTO professional;
+  private PatientReturnDTO patient;
+  private String observation;
+  private Boolean paid;
+  private Double fee;
 
-    public AppointmentResponseDTO(Appointment appointment) {
-        this.id = appointment.getId();
-        this.date = appointment.getDate();
-        this.room = new RoomResponseDTO(appointment.getRoom());
-        this.professional = new HealthProfessionalResponseDTO(appointment.getProfessional());
-        this.patient = new PatientReturnDTO(appointment.getPatient());
-        this.observation = appointment.getObservation();
-        this.paid = appointment.getPaid();
-    }
+  public AppointmentResponseDTO(Appointment appointment) {
+    this.id = appointment.getId();
+    this.date = appointment.getDate();
+    this.hour = appointment.getHour();
+    this.minute = appointment.getMinute();
+    this.room = new RoomResponseDTO(appointment.getRoom());
+    this.professional = new HealthProfessionalResponseDTO(appointment.getProfessional());
+    this.patient = new PatientReturnDTO(appointment.getPatient());
+    this.observation = appointment.getObservation();
+    this.paid = appointment.getPaid();
+    this.fee = appointment.getFee();
+  }
 }

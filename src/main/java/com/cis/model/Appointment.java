@@ -2,7 +2,6 @@ package com.cis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,7 +11,6 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,4 +52,84 @@ public class Appointment implements Serializable {
 
   @Column(nullable = false)
   private Double fee;
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  public Integer getHour() {
+    return hour;
+  }
+
+  public void setHour(Integer hour) {
+    this.hour = hour;
+  }
+
+  public Integer getMinute() {
+    return minute;
+  }
+
+  public void setMinute(Integer minute) {
+    this.minute = minute;
+  }
+
+  public Room getRoom() {
+    return room;
+  }
+
+  public void setRoom(Room room) {
+    this.room = room;
+  }
+
+  public HealthProfessional getProfessional() {
+    return professional;
+  }
+
+  public void setProfessional(HealthProfessional professional) {
+    this.professional = professional;
+  }
+
+  public Patient getPatient() {
+    return patient;
+  }
+
+  public void setPatient(Patient patient) {
+    this.patient = patient;
+  }
+
+  public String getObservation() {
+    return observation;
+  }
+
+  public void setObservation(String observation) {
+    this.observation = observation;
+  }
+
+  public Boolean getPaid() {
+    return paid;
+  }
+
+  public void setPaid(Boolean paid) {
+    this.paid = paid;
+  }
+
+  public Double getFee() {
+    return fee;
+  }
+
+  public void setFee(Double fee) {
+    this.fee = fee;
+  }
 }

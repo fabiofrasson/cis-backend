@@ -8,6 +8,7 @@ import com.cis.model.Schedule;
 import com.cis.model.dto.AppointmentDTO.AppointmentRequestDTO;
 import com.cis.model.dto.AppointmentDTO.AppointmentResponseDTO;
 import com.cis.repository.*;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Log4j2
 public class AppointmentService {
   private final AppointmentRepository appointmentRepository;
   private final RoomRepository roomRepository;
@@ -100,6 +102,9 @@ public class AppointmentService {
             .findById(appointment.getScheduleId())
             .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado."));
 
+    System.out.println(schedule);
+    log.info(schedule);
+
     Optional<Appointment> booking =
         appointmentRepository.findAppointmentByDateAndAndHourAndMinuteAndPatientAndProfessional(
             schedule.getDate(),
@@ -107,6 +112,9 @@ public class AppointmentService {
             schedule.getMinutes(),
             appointment.getScheduleId(),
             appointment.getPatientId());
+
+    System.out.println(booking.get());
+    log.info(booking.get());
 
     if (booking.isPresent()) {
       throw new BadRequestException("Agendamento já existente.");
@@ -116,6 +124,9 @@ public class AppointmentService {
         patientRepository
             .findById(appointment.getPatientId())
             .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado."));
+
+    System.out.println(patient);
+    log.info(patient);
 
     Appointment appointmentToBeSaved =
         Appointment.builder()
@@ -130,7 +141,13 @@ public class AppointmentService {
             .fee(appointment.getFee())
             .build();
 
+    System.out.println(appointmentToBeSaved);
+    log.info(appointmentToBeSaved);
+
     Appointment save = appointmentRepository.save(appointmentToBeSaved);
+
+    System.out.println(save);
+    log.info(save);
 
     return new AppointmentResponseDTO(save);
   }

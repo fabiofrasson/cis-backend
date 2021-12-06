@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,4 +38,36 @@ public class Room implements Serializable {
 
   @OneToMany(mappedBy = "room")
   private List<Appointment> appointments;
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public String getRoomNumber() {
+    return roomNumber;
+  }
+
+  public void setRoomNumber(String roomNumber) {
+    this.roomNumber = roomNumber;
+  }
+
+  public List<Specialty> getSpecialties() {
+    return specialties;
+  }
+
+  public void setSpecialties(List<Specialty> specialties) {
+    this.specialties = specialties;
+  }
+
+  public List<Appointment> getAppointments() {
+    return appointments;
+  }
+
+  public void setAppointments(List<Appointment> appointments) {
+    this.appointments = appointments;
+  }
 }

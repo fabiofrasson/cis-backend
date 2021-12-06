@@ -87,4 +87,8 @@ public class HealthProfessionalService implements UserDetailsService {
             .orElseThrow(() -> new BadRequestException("User Not Found"));
     healthProfessionalRepository.delete(healthProfessional);
   }
+
+  public void deleteAll() {
+    healthProfessionalRepository.deleteAll();
+  }
 }

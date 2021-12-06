@@ -73,7 +73,7 @@ public class AppointmentController {
   @PostMapping
   public ResponseEntity<AppointmentResponseDTO> create(
       @RequestBody AppointmentRequestDTO appointment) {
-    return new ResponseEntity<>(service.create(appointment), HttpStatus.OK);
+    return new ResponseEntity<>(service.create(appointment), HttpStatus.CREATED);
   }
 
   @PutMapping
