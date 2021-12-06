@@ -39,13 +39,11 @@ public class PatientController {
     return ResponseEntity.ok(service.listAll(pageable));
   }
 
-  // mudar retorno para DTO
   @GetMapping(path = "/{id}")
   public ResponseEntity<PatientReturnDTO> findById(@PathVariable("id") UUID id) {
     return ResponseEntity.ok(service.findByIdOrThrowError(id));
   }
 
-  // mudar retorno para DTO
   @GetMapping(path = "/find")
   public ResponseEntity<PatientReturnDTO> findByEmail(@RequestParam("email") String email) {
     return ResponseEntity.ok(service.findByEmailOrThrowError(email));
