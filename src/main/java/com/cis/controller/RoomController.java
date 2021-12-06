@@ -1,6 +1,7 @@
 package com.cis.controller;
 
 import com.cis.model.Room;
+import com.cis.model.dto.RoomDTO.RoomCreationDTO;
 import com.cis.service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class RoomController {
   }
 
   @PostMapping
-  public ResponseEntity<Room> save(@RequestBody @Valid Room room) {
+  public ResponseEntity<Room> save(@RequestBody @Valid RoomCreationDTO room) {
     return new ResponseEntity<>(service.save(room), HttpStatus.CREATED);
   }
 

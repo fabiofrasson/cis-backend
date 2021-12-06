@@ -3,10 +3,15 @@ package com.cis.service;
 import com.cis.exceptions.BadRequestException;
 import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.Room;
+import com.cis.model.Specialty;
+import com.cis.model.dto.RoomDTO.RoomCreationDTO;
+import com.cis.model.dto.SpecialtyDTO.SpecialtyCreationDTO;
 import com.cis.repository.RoomRepository;
+import com.cis.repository.SpecialtyRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,6 +20,7 @@ import java.util.UUID;
 public class RoomService {
 
   private RoomRepository repository;
+  private SpecialtyRepository specialtyRepository;
 
   public RoomService(RoomRepository repository) {
     this.repository = repository;
@@ -43,15 +49,31 @@ public class RoomService {
   }
 
   @Transactional
-  public Room save(Room room) {
+  public Room save(RoomCreationDTO room) {
     Optional<Room> findRoom = repository.findByRoomNumber(room.getRoomNumber());
 
     if (findRoom.isPresent()) {
       throw new BadRequestException("Sala já cadastrada em nosso sistema.");
     }
 
+    List<SpecialtyCreationDTO> specialties = room.getSpecialties();
+    List<Specialty> specialtiesToBeSaved = new ArrayList<>();
+
+    specialties.forEach(
+        specialty -> {
+          Optional<Specialty> byNameIgnoreCase =
+              specialtyRepository.findByNameIgnoreCase(specialty.getName());
+          if (byNameIgnoreCase.isPresent()) {
+            specialtiesToBeSaved.add(byNameIgnoreCase.get());
+          } else {
+            Specialty save =
+                specialtyRepository.save(Specialty.builder().name(specialty.getName()).build());
+            specialtiesToBeSaved.add(save);
+          }
+        });
+
     return repository.save(
-        Room.builder().roomNumber(room.getRoomNumber()).specialties(room.getSpecialties()).build());
+        Room.builder().roomNumber(room.getRoomNumber()).specialties(specialtiesToBeSaved).build());
   }
 
   public void saveAll(List<Room> rooms) {
