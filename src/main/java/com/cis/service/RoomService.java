@@ -22,8 +22,9 @@ public class RoomService {
   private RoomRepository repository;
   private SpecialtyRepository specialtyRepository;
 
-  public RoomService(RoomRepository repository) {
+  public RoomService(RoomRepository repository, SpecialtyRepository specialtyRepository) {
     this.repository = repository;
+    this.specialtyRepository = specialtyRepository;
   }
 
   public List<Room> listAll() {
@@ -72,8 +73,10 @@ public class RoomService {
           }
         });
 
-    return repository.save(
-        Room.builder().roomNumber(room.getRoomNumber()).specialties(specialtiesToBeSaved).build());
+    Room roomToBeSaved =
+        Room.builder().roomNumber(room.getRoomNumber()).specialties(specialtiesToBeSaved).build();
+
+    return repository.save(roomToBeSaved);
   }
 
   public void saveAll(List<Room> rooms) {
