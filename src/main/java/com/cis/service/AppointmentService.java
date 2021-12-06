@@ -1,6 +1,7 @@
 package com.cis.service;
 
 import com.cis.exceptions.BadRequestException;
+import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.Appointment;
 import com.cis.model.HealthProfessional;
 import com.cis.model.Patient;
@@ -11,10 +12,11 @@ import com.cis.repository.AppointmentRepository;
 import com.cis.repository.HealthProfessionalRepository;
 import com.cis.repository.PatientRepository;
 import com.cis.repository.RoomRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,12 +38,15 @@ public class AppointmentService {
     this.professionalRepository = professionalRepository;
   }
 
-  public List<Appointment> listAll() {
-    return appointmentRepository.findAll();
+  public Page<Appointment> listAll(Pageable pageable) {
+    return appointmentRepository.findAll(pageable);
   }
 
-  public Optional<Appointment> findByUUID(UUID uuid) {
-    return appointmentRepository.findById(uuid);
+  public Appointment findByUUID(UUID uuid) {
+
+    return appointmentRepository
+        .findById(uuid)
+        .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada."));
   }
 
   @Transactional
