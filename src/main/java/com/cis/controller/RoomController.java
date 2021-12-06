@@ -2,6 +2,7 @@ package com.cis.controller;
 
 import com.cis.model.Room;
 import com.cis.model.dto.RoomDTO.RoomCreationDTO;
+import com.cis.model.dto.RoomDTO.RoomUpdateDTO;
 import com.cis.service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class RoomController {
   }
 
   @PutMapping(path = "/{id}")
-  public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody Room room)
+  public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody RoomUpdateDTO room)
       throws Exception {
     return new ResponseEntity<>(service.update(id, room), HttpStatus.OK);
   }

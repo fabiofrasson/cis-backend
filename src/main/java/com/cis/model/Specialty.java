@@ -1,5 +1,6 @@
 package com.cis.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Specialty implements Serializable {
   private String name;
 
   @ManyToMany(mappedBy = "specialties")
+  @JsonBackReference
   private List<Room> rooms;
 
   //  @ManyToMany(mappedBy = "professionals")

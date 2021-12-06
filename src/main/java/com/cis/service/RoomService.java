@@ -5,6 +5,7 @@ import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.Room;
 import com.cis.model.Specialty;
 import com.cis.model.dto.RoomDTO.RoomCreationDTO;
+import com.cis.model.dto.RoomDTO.RoomUpdateDTO;
 import com.cis.model.dto.SpecialtyDTO.SpecialtyCreationDTO;
 import com.cis.repository.RoomRepository;
 import com.cis.repository.SpecialtyRepository;
@@ -92,17 +93,32 @@ public class RoomService {
     repository.deleteAll();
   }
 
-  public String update(UUID id, Room room) {
+  public String update(UUID id, RoomUpdateDTO room) {
 
-    Optional<Room> savedRoom = repository.findById(id);
+    Room savedRoom =
+        repository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Sala não encontrada."));
 
-    if (savedRoom.isEmpty()) {
-      throw new ResourceNotFoundException("Sala não encontrada.");
-    }
+    List<SpecialtyCreationDTO> specialties = room.getSpecialties();
+    List<Specialty> specialtiesToBeSaved = new ArrayList<>();
 
-    savedRoom.get().setRoomNumber(room.getRoomNumber());
-    savedRoom.get().setSpecialties(room.getSpecialties());
-    repository.save(savedRoom.get());
+    specialties.forEach(
+        specialty -> {
+          Optional<Specialty> byNameIgnoreCase =
+              specialtyRepository.findByNameIgnoreCase(specialty.getName());
+          if (byNameIgnoreCase.isPresent()) {
+            specialtiesToBeSaved.add(byNameIgnoreCase.get());
+          } else {
+            Specialty save =
+                specialtyRepository.save(Specialty.builder().name(specialty.getName()).build());
+            specialtiesToBeSaved.add(save);
+          }
+        });
+
+    savedRoom.setRoomNumber(room.getRoomNumber());
+    savedRoom.setSpecialties(specialtiesToBeSaved);
+    repository.save(savedRoom);
     return "Registro atualizado com sucesso!";
   }
 }
