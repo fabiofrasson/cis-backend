@@ -124,6 +124,8 @@ public class PatientService implements UserDetailsService {
     Address address =
         addressService.save(CepService.convertCepToAddress(CepService.formatCep(patient.getCep())));
 
+    savedPatient.setId(id);
+    savedPatient.setPatientId(patient.getPatientId());
     savedPatient.setName(patient.getName());
     savedPatient.setEmail(patient.getEmail());
     savedPatient.setPhone(patient.getPhone());
