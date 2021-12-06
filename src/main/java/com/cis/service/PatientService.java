@@ -54,14 +54,12 @@ public class PatientService implements UserDetailsService {
   }
 
   public PatientReturnDTO findByIdOrThrowError(UUID id) {
-    Optional<Patient> patient = repository.findById(id);
 
-    if (patient.isEmpty()) {
-      throw new BadRequestException("Paciente não encontrado.");
-    } else {
-      Patient patient1 = patient.get();
-      return new PatientReturnDTO(patient1);
-    }
+    Patient patient =
+        repository
+            .findById(id)
+            .orElseThrow(() -> new BadRequestException("Paciente não encontrado."));
+    return new PatientReturnDTO(patient);
   }
 
   public PatientReturnDTO findByEmailOrThrowError(String email) {
