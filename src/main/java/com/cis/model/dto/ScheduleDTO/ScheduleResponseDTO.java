@@ -21,6 +21,8 @@ public class ScheduleResponseDTO {
     private HealthProfessionalResponseDTO professional;
     private RoomResponseDTO room;
     private Date date;
+    private Integer hour;
+    private Integer minutes;
 
 
     public ScheduleResponseDTO(Schedule schedule) {
@@ -28,5 +30,7 @@ public class ScheduleResponseDTO {
         this.professional = new HealthProfessionalResponseDTO(schedule.getProfessional());
         this.room = new RoomResponseDTO(schedule.getRoom());
         this.date = schedule.getDate();
+        this.hour = schedule.getHour();
+        this.minutes = schedule.getMinutes();
     }
 }
