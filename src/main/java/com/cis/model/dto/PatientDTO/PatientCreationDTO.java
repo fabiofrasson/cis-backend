@@ -27,7 +27,6 @@ public class PatientCreationDTO implements Serializable {
   private Character gender;
   private String addressNumber;
   private String addressLine2;
-  //  private Address address;
 
   // Address
   private String cep;

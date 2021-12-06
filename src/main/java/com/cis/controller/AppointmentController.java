@@ -1,8 +1,8 @@
 package com.cis.controller;
 
-import com.cis.exceptions.BadRequestException;
 import com.cis.model.Appointment;
 import com.cis.model.dto.AppointmentDTO.AppointmentRequestDTO;
+import com.cis.model.dto.AppointmentDTO.AppointmentResponseDTO;
 import com.cis.service.AppointmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,13 +71,9 @@ public class AppointmentController {
   }
 
   @PostMapping
-  public ResponseEntity<String> create(@RequestBody AppointmentRequestDTO entity) {
-    try {
-      var appointmentResponseDTO = service.create(entity);
-      return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK);
-    } catch (Exception e) {
-      throw new BadRequestException(e.getMessage());
-    }
+  public ResponseEntity<AppointmentResponseDTO> create(
+      @RequestBody AppointmentRequestDTO appointment) {
+    return new ResponseEntity<>(service.create(appointment), HttpStatus.OK);
   }
 
   @PutMapping
