@@ -180,8 +180,9 @@ public class AppointmentService {
     return ("Appointment modified with success");
   }
 
-  public void delete(UUID uuid) {
-    appointmentRepository.deleteById(uuid);
+  public String delete(UUID id) {
+    appointmentRepository.deleteById(id);
+    return "Registro deletado com sucesso!";
   }
 
   public AppointmentResponseDTO update(Appointment appointment) {

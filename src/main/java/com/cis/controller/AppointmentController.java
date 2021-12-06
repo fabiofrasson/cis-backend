@@ -77,8 +77,8 @@ public class AppointmentController {
   }
 
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+  public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
     service.delete(id);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
