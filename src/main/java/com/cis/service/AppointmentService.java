@@ -87,10 +87,10 @@ public class AppointmentService {
     Optional<Appointment> busyHour = appointmentRepository.findByHour(entity.getHour());
     Optional<Appointment> busyMinute = appointmentRepository.findByMinute(entity.getMinute());
     Optional<Appointment> busyProfessional =
-        appointmentRepository.findByProfessionalId(entity.getProfessional_id());
-    Optional<Appointment> busyRoom = appointmentRepository.findByRoomId(entity.getRoom_id());
+        appointmentRepository.findByProfessionalId(entity.getProfessionalId());
+    Optional<Appointment> busyRoom = appointmentRepository.findByRoomId(entity.getRoomId());
     Optional<Appointment> busyPatient =
-        appointmentRepository.findByPatientId(entity.getPatient_id());
+        appointmentRepository.findByPatientId(entity.getPatientId());
 
     // Verificação se o Professinal já está com algum agendamento para esse horário FALTA COLOCAR O
     // DIA
@@ -110,15 +110,15 @@ public class AppointmentService {
 
     Room room =
         roomRepository
-            .findById(entity.getRoom_id())
+            .findById(entity.getRoomId())
             .orElseThrow(() -> new BadRequestException("Room not found"));
     Patient patient =
         patientRepository
-            .findById(entity.getPatient_id())
+            .findById(entity.getPatientId())
             .orElseThrow(() -> new BadRequestException("Patient not found"));
     HealthProfessional professional =
         professionalRepository
-            .findById(entity.getProfessional_id())
+            .findById(entity.getProfessionalId())
             .orElseThrow(() -> new BadRequestException("Professional not found"));
 
     Appointment appointmentToBeSaved = new Appointment();
@@ -158,15 +158,15 @@ public class AppointmentService {
 
     Room room =
         roomRepository
-            .findById(entity.getRoom_id())
+            .findById(entity.getRoomId())
             .orElseThrow(() -> new BadRequestException("Room not found"));
     Patient patient =
         patientRepository
-            .findById(entity.getPatient_id())
+            .findById(entity.getPatientId())
             .orElseThrow(() -> new BadRequestException("Patient not found"));
     HealthProfessional professional =
         professionalRepository
-            .findById(entity.getProfessional_id())
+            .findById(entity.getProfessionalId())
             .orElseThrow(() -> new BadRequestException("Professional not found"));
 
     appointment.setHour(entity.getHour());
