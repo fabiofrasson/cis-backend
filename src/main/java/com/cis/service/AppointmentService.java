@@ -3,6 +3,7 @@ package com.cis.service;
 import com.cis.exceptions.BadRequestException;
 import com.cis.exceptions.ResourceNotFoundException;
 import com.cis.model.Appointment;
+import com.cis.model.HealthProfessional;
 import com.cis.model.Patient;
 import com.cis.model.Schedule;
 import com.cis.model.dto.AppointmentDTO.AppointmentRequestDTO;
@@ -87,7 +88,7 @@ public class AppointmentService {
   }
 
   public Appointment findByBooking(
-      Date date, Integer hour, Integer minute, UUID patient, UUID professional) {
+      Date date, Integer hour, Integer minute, Patient patient, HealthProfessional professional) {
     return appointmentRepository
         .findAppointmentByDateAndAndHourAndMinuteAndPatientAndProfessional(
             date, hour, minute, patient, professional)
@@ -102,19 +103,18 @@ public class AppointmentService {
             .findById(appointment.getScheduleId())
             .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado."));
 
-    System.out.println(schedule);
-    log.info(schedule);
+    Patient patientById = patientRepository.findById(appointment.getPatientId()).get();
+
+    HealthProfessional healthProfessionalById =
+        professionalRepository.getById(schedule.getProfessional().getProfessional_id());
 
     Optional<Appointment> booking =
         appointmentRepository.findAppointmentByDateAndAndHourAndMinuteAndPatientAndProfessional(
             schedule.getDate(),
             schedule.getHour(),
             schedule.getMinutes(),
-            appointment.getScheduleId(),
-            appointment.getPatientId());
-
-    System.out.println(booking.get());
-    log.info(booking.get());
+            patientById,
+            healthProfessionalById);
 
     if (booking.isPresent()) {
       throw new BadRequestException("Agendamento já existente.");
@@ -124,9 +124,6 @@ public class AppointmentService {
         patientRepository
             .findById(appointment.getPatientId())
             .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado."));
-
-    System.out.println(patient);
-    log.info(patient);
 
     Appointment appointmentToBeSaved =
         Appointment.builder()
@@ -141,46 +138,25 @@ public class AppointmentService {
             .fee(appointment.getFee())
             .build();
 
-    System.out.println(appointmentToBeSaved);
-    log.info(appointmentToBeSaved);
-
     Appointment save = appointmentRepository.save(appointmentToBeSaved);
-
-    System.out.println(save);
-    log.info(save);
 
     return new AppointmentResponseDTO(save);
   }
 
-  //      public String update(UUID id, AppointmentRequestDTO entity) {
-  //        Appointment appointment =
-  //            appointmentRepository
-  //                .findById(id)
-  //                .orElseThrow(() -> new BadRequestException("Appointment Not Found"));
-  //
-  //        Room room =
-  //            roomRepository
-  //                .findById(entity.getRoomId())
-  //                .orElseThrow(() -> new BadRequestException("Room not found"));
-  //        Patient patient =
-  //            patientRepository
-  //                .findById(entity.getPatientId())
-  //                .orElseThrow(() -> new BadRequestException("Patient not found"));
-  //        HealthProfessional professional =
-  //            professionalRepository
-  //                .findById(entity.getProfessionalId())
-  //                .orElseThrow(() -> new BadRequestException("Professional not found"));
-  //
-  //        appointment.setHour(entity.getHour());
-  //        appointment.setMinute(entity.getMinute());
-  //        appointment.setRoom(room);
-  //        appointment.setPatient(patient);
-  //        appointment.setProfessional(professional);
-  //
-  //        Appointment save = appointmentRepository.save(appointment);
-  //
-  //    return ("Appointment modified with success");
-  //  }
+  public String update(UUID id, AppointmentRequestDTO appointment) {
+
+    Schedule schedule =
+        scheduleRepository
+            .findById(appointment.getScheduleId())
+            .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado."));
+
+    Appointment appointment1 =
+        appointmentRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado."));
+
+    return "I need to be finished! :)";
+  }
 
   public String delete(UUID id) {
     appointmentRepository.deleteById(id);

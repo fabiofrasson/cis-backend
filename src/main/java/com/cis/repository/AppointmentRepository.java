@@ -1,6 +1,8 @@
 package com.cis.repository;
 
 import com.cis.model.Appointment;
+import com.cis.model.HealthProfessional;
+import com.cis.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
@@ -21,5 +23,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
   Optional<Appointment> findByPatientId(UUID patient_id);
 
   Optional<Appointment> findAppointmentByDateAndAndHourAndMinuteAndPatientAndProfessional(
-      Date date, Integer hour, Integer minute, UUID patient, UUID professional);
+      Date date, Integer hour, Integer minute, Patient patient, HealthProfessional professional);
 }

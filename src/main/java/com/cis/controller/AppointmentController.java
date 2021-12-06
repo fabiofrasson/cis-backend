@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.UUID;
 
 @RestController
@@ -60,16 +59,6 @@ public class AppointmentController {
     return ResponseEntity.ok(service.findByPatientId(patientId));
   }
 
-  @GetMapping(path = "/find/booking/")
-  public ResponseEntity<Appointment> findByBooking(
-      @RequestParam("date") Date date,
-      @RequestParam("hour") Integer hour,
-      @RequestParam("minute") Integer minute,
-      @RequestParam("patient") UUID patient,
-      @RequestParam("professional") UUID professional) {
-    return ResponseEntity.ok(service.findByBooking(date, hour, minute, patient, professional));
-  }
-
   @PostMapping
   public ResponseEntity<AppointmentResponseDTO> create(
       @RequestBody AppointmentRequestDTO appointment) {
@@ -85,7 +74,6 @@ public class AppointmentController {
 
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
-    service.delete(id);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
   }
 }
